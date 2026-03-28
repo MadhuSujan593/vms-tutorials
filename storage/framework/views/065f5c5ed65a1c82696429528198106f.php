@@ -8,39 +8,39 @@
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    <div class="relative py-24 sm:py-32 overflow-hidden bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+    <div class="relative py-12 sm:py-16 overflow-hidden bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
         <!-- Abstract Background Gradients -->
-        <div class="absolute top-0 -left-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
-
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+ 
         <div class="relative max-w-7xl mx-auto px-6 lg:px-8 text-center">
-            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-6xl mb-6">
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl mb-4">
                 Master Modern <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">Technology</span>
             </h1>
-            <p class="mt-4 text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p class="mt-2 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
                 Step-by-step professional tutorials to elevate your coding skills. From backend logic to frontend brilliance.
             </p>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <a href="<?php echo e(route('public.category', $category)); ?>" class="group relative bg-white dark:bg-gray-800 p-8 rounded-3xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-500 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                <a href="<?php echo e(route('public.category', $category)); ?>" class="group relative bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-500 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden">
                     <!-- Hover Accent -->
                     <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-indigo-500 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                     
                     <div>
-                        <div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-indigo-600/30">
+                        <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-105 transition-transform duration-300 shadow-md shadow-indigo-600/30">
                             <!-- Icon Placeholder - Letter of Category -->
-                            <span class="text-2xl font-bold uppercase"><?php echo e(substr($category->name, 0, 1)); ?></span>
+                            <span class="text-xl font-bold uppercase"><?php echo e(substr($category->name, 0, 1)); ?></span>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
                             <?php echo e($category->name); ?>
 
                         </h3>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
                             <?php echo e($category->description ?? 'Explore comprehensive tutorials and guides for '.$category->name.'.'); ?>
 
                         </p>

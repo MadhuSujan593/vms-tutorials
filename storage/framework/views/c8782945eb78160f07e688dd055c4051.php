@@ -117,7 +117,7 @@ unset($__errorArgs, $__bag); ?>
 
                         <!-- Publish Toggle -->
                         <div class="mb-6 flex items-center">
-                            <input type="checkbox" name="is_published" id="is_published" class="h-4 w-4 rounded border-gray-300 text-indigo-600" <?php echo e(old('is_published') ? 'checked' : ''); ?>>
+                            <input type="checkbox" name="is_published" id="is_published" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-0 focus:ring-offset-0" <?php echo e(old('is_published') ? 'checked' : ''); ?>>
                             <label for="is_published" class="ml-2 block text-sm text-gray-900">Publish immediately?</label>
                         </div>
 

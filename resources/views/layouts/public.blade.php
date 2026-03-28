@@ -35,6 +35,35 @@
             .dark .glass {
                 background: rgba(17, 24, 39, 0.7);
             }
+            .copy-btn {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                padding: 6px 12px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 8px;
+                color: #fff;
+                cursor: pointer;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                transition: all 0.2s;
+                opacity: 0.4;
+                z-index: 10;
+            }
+            pre:hover .copy-btn {
+                opacity: 1;
+            }
+            .copy-btn:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+            .copy-btn.copied {
+                background: #10b981;
+                border-color: #10b981;
+                opacity: 1;
+            }
         </style>
     </head>
     <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -83,5 +112,50 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+        
+        <script>
+            // Initialize Copy Buttons
+            function initCodeBlocks() {
+                document.querySelectorAll('pre:not(.has-copy-button)').forEach((pre) => {
+                    // Make pre relative for absolute positioning of the button
+                    pre.classList.add('relative', 'has-copy-button');
+                    
+                    // Force a default language if none exists for better highlighting
+                    const code = pre.querySelector('code');
+                    if (code && !code.className.match(/language-/)) {
+                        code.classList.add('language-javascript');
+                    }
+
+                    const button = document.createElement('button');
+                    button.className = 'copy-btn';
+                    button.innerText = 'Copy';
+                    pre.appendChild(button);
+
+                    button.addEventListener('click', () => {
+                        const codeText = code ? code.innerText : pre.innerText;
+                        navigator.clipboard.writeText(codeText).then(() => {
+                            button.innerText = 'Copied!';
+                            button.classList.add('copied');
+                            
+                            setTimeout(() => {
+                                button.innerText = 'Copy';
+                                button.classList.remove('copied');
+                            }, 2000);
+                        });
+                    });
+                });
+                
+                // Re-run Prism if it's available
+                if (window.Prism) {
+                    Prism.highlightAll();
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', initCodeBlocks);
+            // Also run it immediately in case DOM is already ready
+            if (document.readyState === 'interactive' || document.readyState === 'complete') {
+                initCodeBlocks();
+            }
+        </script>
     </body>
 </html>
