@@ -26,7 +26,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon' => 'nullable|image|max:2048'
+            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048'
         ]);
         
         if ($request->hasFile('icon')) {
@@ -52,7 +52,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon' => 'nullable|image|max:2048'
+            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048'
         ]);
 
         if ($request->hasFile('icon')) {

@@ -130,6 +130,7 @@
                         <div class="flex-1"></div>
                     @endif
                 </div>
+                @include('public.partials.banner', ['banners' => $banners])
             </main>
 
             <!-- Right Sidebar (TOC) -->
@@ -152,6 +153,10 @@
                         @endforeach
                     </ul>
                 </nav>
+
+                <div class="mt-12">
+                    @include('public.partials.banner', ['banners' => $banners])
+                </div>
             </aside>
 
         </div>

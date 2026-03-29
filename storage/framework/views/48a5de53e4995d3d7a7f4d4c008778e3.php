@@ -161,6 +161,7 @@
                         <div class="flex-1"></div>
                     <?php endif; ?>
                 </div>
+                <?php echo $__env->make('public.partials.banner', ['banners' => $banners], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </main>
 
             <!-- Right Sidebar (TOC) -->
@@ -184,6 +185,10 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </nav>
+
+                <div class="mt-12">
+                    <?php echo $__env->make('public.partials.banner', ['banners' => $banners], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                </div>
             </aside>
 
         </div>

@@ -71,6 +71,8 @@
             </p>
         </div>
 
+        @include('public.partials.banner', ['banners' => $banners])
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($tutorials as $tutorial)
                 <a href="{{ route('public.tutorial', [$category->slug, $tutorial->slug]) }}" class="group bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500/50 hover:shadow-md transition-all flex items-center gap-3">

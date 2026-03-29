@@ -6,19 +6,26 @@ use Illuminate\Http\Request;
 
 use App\Models\Category;
 use App\Models\Tutorial;
+use App\Models\Banner;
 
 class PublicController extends Controller
 {
+    private function getActiveBanners()
+    {
+        return Banner::where('is_active', true)->orderBy('sort_order')->orderBy('created_at', 'desc')->get();
+    }
+
     public function home()
     {
         $categories = Category::withCount(['tutorials' => function($query) {
             $query->where('is_published', true);
         }])->orderBy('name')->get();
 
+        $banners = $this->getActiveBanners();
         $title = "VMS Tutorials - Master Modern Technology";
         $metaDescription = "Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance with industry-standard guides.";
 
-        return view('public.home', compact('categories', 'title', 'metaDescription'));
+        return view('public.home', compact('categories', 'banners', 'title', 'metaDescription'));
     }
 
     public function category(Category $category)
@@ -32,10 +39,11 @@ class PublicController extends Controller
                               ->orderBy('sort_order')
                               ->get();
         
+        $banners = $this->getActiveBanners();
         $title = $category->name . " Tutorials - Master " . $category->name . " Step-by-Step";
         $metaDescription = $category->description ?? "Comprehensive tutorials and professional guides for " . $category->name . ". Learn from scratch and build real-world applications.";
                               
-        return view('public.category', compact('category', 'tutorials', 'title', 'metaDescription'));
+        return view('public.category', compact('category', 'tutorials', 'banners', 'title', 'metaDescription'));
     }
 
     public function tutorial(Category $category, Tutorial $tutorial)
@@ -67,9 +75,10 @@ class PublicController extends Controller
             }
         }
 
+        $banners = $this->getActiveBanners();
         $title = $tutorial->title . " | " . $category->name . " Tutorial";
         $metaDescription = \App\View\Components\Markdown::getExcerpt($tutorial->content);
         
-        return view('public.tutorial', compact('category', 'tutorial', 'allTutorials', 'flattenedTutorials', 'title', 'metaDescription'));
+        return view('public.tutorial', compact('category', 'tutorial', 'allTutorials', 'flattenedTutorials', 'banners', 'title', 'metaDescription'));
     }
 }
