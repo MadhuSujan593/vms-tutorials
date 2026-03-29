@@ -52,9 +52,9 @@ Route::get('/sitemap.xml', function () {
     return $sitemap->toResponse(request());
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+use App\Http\Controllers\Admin\AdminController;
+
+Route::get('/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TutorialController;
