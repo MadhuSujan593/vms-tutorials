@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Category;
 
@@ -24,8 +25,13 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'icon' => 'nullable|image|max:2048'
         ]);
+        
+        if ($request->hasFile('icon')) {
+            $validated['icon'] = $request->file('icon')->store('categories', 'public');
+        }
         
         Category::create($validated);
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
@@ -45,8 +51,16 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'icon' => 'nullable|image|max:2048'
         ]);
+
+        if ($request->hasFile('icon')) {
+            if ($category->icon) {
+                Storage::disk('public')->delete($category->icon);
+            }
+            $validated['icon'] = $request->file('icon')->store('categories', 'public');
+        }
 
         $category->update($validated);
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
@@ -54,6 +68,9 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        if ($category->icon) {
+            Storage::disk('public')->delete($category->icon);
+        }
         $category->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }

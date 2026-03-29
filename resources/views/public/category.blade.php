@@ -1,5 +1,8 @@
 <x-public-layout>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+    @push('mobile_sidebar')
+        @include('public.partials.tutorial_nav', ['navItems' => $tutorials])
+    @endpush
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-8 sm:pt-12 pb-16 sm:pb-24">
         <div class="mb-12">
             <nav class="flex mb-8" aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-4">
@@ -20,7 +23,7 @@
                 </ol>
             </nav>
 
-            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl mb-6">
+            <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white sm:text-3xl mb-4">
                 {{ $category->name }} Tutorials
             </h2>
             <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl">
@@ -30,12 +33,16 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($tutorials as $tutorial)
-                <a href="{{ route('public.tutorial', [$category->slug, $tutorial->slug]) }}" class="group bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500/50 hover:shadow-lg transition-all flex items-center gap-4">
-                    <div class="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <a href="{{ route('public.tutorial', [$category->slug, $tutorial->slug]) }}" class="group bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500/50 hover:shadow-md transition-all flex items-center gap-3">
+                    <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 overflow-hidden">
+                        @if($category->icon)
+                            <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }}" class="w-full h-full object-cover">
+                        @else
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        @endif
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        <h4 class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                             {{ $tutorial->title }}
                         </h4>
                         <span class="text-xs text-gray-500 uppercase tracking-wider">Read Tutorial &rarr;</span>

@@ -32,9 +32,13 @@
                     <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-indigo-500 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                     
                     <div>
-                        <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-105 transition-transform duration-300 shadow-md shadow-indigo-600/30">
-                            <!-- Icon Placeholder - Letter of Category -->
-                            <span class="text-xl font-bold uppercase"><?php echo e(substr($category->name, 0, 1)); ?></span>
+                        <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-105 transition-transform duration-300 shadow-md shadow-indigo-600/30 overflow-hidden">
+                            <?php if($category->icon): ?>
+                                <img src="<?php echo e(asset('storage/' . $category->icon)); ?>" alt="<?php echo e($category->name); ?>" class="w-full h-full object-cover">
+                            <?php else: ?>
+                                <!-- Icon Placeholder - Letter of Category -->
+                                <span class="text-xl font-bold uppercase"><?php echo e(substr($category->name, 0, 1)); ?></span>
+                            <?php endif; ?>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
                             <?php echo e($category->name); ?>

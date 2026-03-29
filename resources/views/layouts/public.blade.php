@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" :class="{ 'dark': darkMode }">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" 
+      x-data="{ 
+        darkMode: localStorage.getItem('darkMode') === 'true',
+        mobileMenuOpen: false 
+      }" 
+      :class="{ 'dark': darkMode }">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -73,6 +78,12 @@
                 border-color: #10b981;
                 opacity: 1;
             }
+            .prose table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
         </style>
     </head>
     <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -81,10 +92,15 @@
         <nav class="sticky top-0 z-50 glass border-b border-gray-200 dark:border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
-                    <div class="flex items-center">
+                    <div class="flex items-center gap-4">
+                        <!-- Hamburger Menu (Mobile Only) -->
+                        <button @click="mobileMenuOpen = true" class="lg:hidden p-2 -ml-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+
                         <a href="{{ route('home') }}" class="flex items-center gap-2 group text-2xl font-bold tracking-tighter">
                             <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:bg-indigo-500 transition-colors">VMS</span>
-                            <span class="dark:text-white">Tutorials</span>
+                            <span class="dark:text-white hidden sm:inline">Tutorials</span>
                         </a>
                     </div>
 
@@ -104,6 +120,51 @@
                 </div>
             </div>
         </nav>
+        
+        <!-- Mobile Sidebar Drawer -->
+        <div x-show="mobileMenuOpen" 
+             x-cloak
+             class="fixed inset-0 z-[60] lg:hidden" 
+             role="dialog" aria-modal="true">
+            <!-- Backdrop -->
+            <div x-show="mobileMenuOpen" 
+                 x-transition:enter="transition-opacity ease-linear duration-300" 
+                 x-transition:enter-start="opacity-0" 
+                 x-transition:enter-end="opacity-100" 
+                 x-transition:leave="transition-opacity ease-linear duration-300" 
+                 x-transition:leave-start="opacity-100" 
+                 x-transition:leave-end="opacity-0" 
+                 @click="mobileMenuOpen = false"
+                 class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm"></div>
+
+            <div class="fixed inset-y-0 left-0 w-full max-w-xs flex">
+                <div x-show="mobileMenuOpen" 
+                     x-transition:enter="transition ease-in-out duration-300 transform" 
+                     x-transition:enter-start="-translate-x-full" 
+                     x-transition:enter-end="translate-x-0" 
+                     x-transition:leave="transition ease-in-out duration-300 transform" 
+                     x-transition:leave-start="translate-x-0" 
+                     x-transition:leave-end="-translate-x-full" 
+                     class="relative flex-1 flex flex-col w-full bg-white dark:bg-gray-900 shadow-2xl"
+                     @click.away="mobileMenuOpen = false">
+                    
+                    <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto custom-scrollbar">
+                        <div class="flex-shrink-0 flex items-center justify-between px-4 mb-8">
+                            <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+                                <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS</span>
+                                <span class="dark:text-white">Tutorials</span>
+                            </div>
+                            <button @click="mobileMenuOpen = false" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
+                        <nav x-data="{ openSection: @json(isset($tutorial) ? $tutorial->id : 0) }" class="mt-5 px-4 space-y-1">
+                            @stack('mobile_sidebar')
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <main class="min-h-screen">
             {{ $slot }}

@@ -10,71 +10,22 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('title', null, []); ?> <?php echo e($tutorial->title); ?> - <?php echo e($category->name); ?> | VMS Tutorials <?php $__env->endSlot(); ?>
 
+    <?php $__env->startPush('mobile_sidebar'); ?>
+        <?php echo $__env->make('public.partials.tutorial_nav', ['navItems' => $allTutorials], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php $__env->stopPush(); ?>
+
     <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- Left Sidebar (Topic List) - W3Schools Style -->
-            <aside class="w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] overflow-y-auto pb-10 border-r border-gray-100 dark:border-gray-800 pr-4 custom-scrollbar">
-                <div class="mb-8">
-                    <h3 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
-                        <?php echo e($category->name); ?> Tutorials
-                    </h3>
-                    <nav class="space-y-1" x-data="{ openSection: <?php echo json_encode($tutorial->parent_id ?? $tutorial->id, 15, 512) ?> }">
-                        <?php $__currentLoopData = $allTutorials; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <div class="relative">
-                                <?php 
-                                    $hasChildren = $item->children->count() > 0;
-                                    $isActiveParent = ($tutorial->id === $item->id || $tutorial->parent_id === $item->id);
-                                    $linkTarget = $hasChildren ? $item->children->first() : $item;
-                                ?>
-
-                                <div class="flex items-center group">
-                                    <a href="<?php echo e(route('public.tutorial', [$category->slug, $linkTarget->slug])); ?>" 
-                                       @click="openSection = <?php echo e($item->id); ?>"
-                                       class="flex-1 group flex items-center justify-between px-3 py-2 text-sm font-bold rounded-xl transition-all duration-200 
-                                       <?php echo e($isActiveParent
-                                          ? 'bg-indigo-600/10 text-indigo-600 dark:text-indigo-400' 
-                                          : 'text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'); ?>">
-                                        <span class="truncate"><?php echo e($item->title); ?></span>
-                                        
-                                        <?php if($hasChildren): ?>
-                                            <svg @click.prevent.stop="openSection = (openSection === <?php echo e($item->id); ?> ? null : <?php echo e($item->id); ?>)" 
-                                                 class="w-4 h-4 transition-transform duration-200" 
-                                                 :class="openSection === <?php echo e($item->id); ?> ? 'rotate-180' : ''"
-                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                            </svg>
-                                        <?php endif; ?>
-                                    </a>
-                                </div>
-
-                                <?php if($hasChildren): ?>
-                                    <div x-show="openSection === <?php echo e($item->id); ?>" 
-                                         x-transition:enter="transition ease-out duration-100"
-                                         x-transition:enter-start="opacity-0 -translate-y-2"
-                                         x-transition:enter-end="opacity-100 translate-y-0"
-                                         class="mt-1 space-y-1 pl-4 border-l-2 border-gray-100 dark:border-gray-800 ml-3">
-                                        <?php $__currentLoopData = $item->children; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <a href="<?php echo e(route('public.tutorial', [$category->slug, $child->slug])); ?>" 
-                                               class="group flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 
-                                               <?php echo e($tutorial->id === $child->id 
-                                                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30' 
-                                                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'); ?>">
-                                                <span class="truncate"><?php echo e($child->title); ?></span>
-                                            </a>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </nav>
-                </div>
+            <!-- Left Sidebar (Desktop Only) -->
+            <aside class="hidden lg:block w-64 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pb-10 border-r border-gray-100 dark:border-gray-800 pr-4 custom-scrollbar">
+                <?php echo $__env->make('public.partials.tutorial_nav', ['navItems' => $allTutorials], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </aside>
 
             <!-- Main Content Area -->
-            <main class="flex-1 min-w-0 py-8 lg:py-12">
+            <main class="flex-1 min-w-0 py-6 lg:py-10">
                 <!-- Breadcrumbs -->
-                <nav class="flex mb-8 text-sm font-medium" aria-label="Breadcrumb">
+                <nav class="flex mb-6 text-xs font-medium" aria-label="Breadcrumb">
                     <ol class="flex items-center space-x-2">
                         <li><a href="<?php echo e(route('home')); ?>" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Home</a></li>
                         <li class="flex items-center gap-2">
@@ -85,12 +36,12 @@
                 </nav>
 
                 <article>
-                    <header class="mb-12">
-                        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                    <header class="mb-8">
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3">
                             <?php echo e($tutorial->title); ?>
 
                         </h1>
-                        <div class="h-1.5 w-20 bg-indigo-600 rounded-full"></div>
+                        <div class="h-1 w-16 bg-indigo-600 rounded-full"></div>
                     </header>
 
                     <div class="relative">
@@ -118,7 +69,7 @@
                 </article>
 
                 <!-- Navigation between topics -->
-                <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center gap-4">
+                <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
                     <?php
                         $currentIndex = $flattenedTutorials->search(fn($t) => $t->id === $tutorial->id);
                         $prev = $currentIndex > 0 ? $flattenedTutorials->get($currentIndex - 1) : null;
@@ -126,10 +77,10 @@
                     ?>
 
                     <?php if($prev): ?>
-                        <a href="<?php echo e(route('public.tutorial', [$category->slug, $prev->slug])); ?>" class="group flex-1 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all shadow-sm flex flex-col items-start gap-1">
-                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Previous Topic</span>
-                            <span class="text-base font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        <a href="<?php echo e(route('public.tutorial', [$category->slug, $prev->slug])); ?>" class="group flex-1 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all shadow-sm flex flex-col items-start gap-1">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Previous Topic</span>
+                            <span class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors flex items-center gap-2">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                                 <?php echo e($prev->title); ?>
 
                             </span>
@@ -139,12 +90,12 @@
                     <?php endif; ?>
 
                     <?php if($next): ?>
-                        <a href="<?php echo e(route('public.tutorial', [$category->slug, $next->slug])); ?>" class="group flex-1 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all shadow-sm flex flex-col items-end gap-1 text-right">
-                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Next Topic</span>
-                            <span class="text-base font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors flex items-center gap-2">
+                        <a href="<?php echo e(route('public.tutorial', [$category->slug, $next->slug])); ?>" class="group flex-1 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all shadow-sm flex flex-col items-end gap-1 text-right">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Next Topic</span>
+                            <span class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors flex items-center gap-2">
                                 <?php echo e($next->title); ?>
 
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </span>
                         </a>
                     <?php else: ?>
@@ -154,10 +105,10 @@
             </main>
 
             <!-- Right Sidebar (TOC) -->
-            <aside class="hidden xl:block w-64 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto mt-12 py-12 pl-8 border-l border-gray-50 dark:border-gray-800">
+            <aside class="hidden xl:block w-48 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto mt-10 py-10 pl-6 border-l border-gray-50 dark:border-gray-800">
                 <nav class="space-y-4">
-                    <h5 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-6">On this page</h5>
-                    <ul class="space-y-4 text-sm font-medium">
+                    <h5 class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">On this page</h5>
+                    <ul class="space-y-2 text-xs font-medium">
                         <li>
                             <a href="#" class="block text-indigo-600 dark:text-indigo-400">Overview</a>
                         </li>
@@ -166,7 +117,7 @@
                         <?php $__currentLoopData = $md->toc; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li>
                                 <a href="#<?php echo e($item['slug']); ?>" 
-                                   class="block <?php echo e($item['tag'] === 'h3' ? 'pl-4' : ''); ?> text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                                   class="block <?php echo e($item['tag'] === 'h3' ? 'pl-3' : ''); ?> text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
                                     <?php echo e($item['text']); ?>
 
                                 </a>

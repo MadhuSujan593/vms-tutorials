@@ -16,7 +16,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 border-b border-gray-200">
-                    <form method="POST" action="{{ route('admin.categories.update', $category) }}">
+                    <form method="POST" action="{{ route('admin.categories.update', $category) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -25,6 +25,24 @@
                             <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
                             <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-sm" value="{{ old('name', $category->name) }}">
                             @error('name')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Icon -->
+                        <div class="mb-4">
+                            <label for="icon" class="block text-sm font-medium text-gray-700">Category Icon (Logo)</label>
+                            @if($category->icon)
+                                <div class="mt-2 mb-4 flex items-center space-x-4">
+                                    <div class="w-16 h-16 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md overflow-hidden">
+                                        <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <span class="text-xs text-gray-500 font-medium italic">Current Icon</span>
+                                </div>
+                            @endif
+                            <input type="file" name="icon" id="icon" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                            <p class="text-xs text-gray-400 mt-1 italic">Leave empty to keep the current icon.</p>
+                            @error('icon')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
