@@ -38,6 +38,23 @@ class Markdown extends Component
         }
     }
 
+    /**
+     * Get a plain text excerpt from markdown content for SEO meta descriptions.
+     */
+    public static function getExcerpt(string $content, int $limit = 160): string
+    {
+        $converter = new \League\CommonMark\CommonMarkConverter([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
+        
+        $html = $converter->convert($content)->getContent();
+        $plain = strip_tags($html);
+        $excerpt = \Illuminate\Support\Str::limit($plain, $limit);
+        
+        return str_replace(["\n", "\r", '"'], ' ', $excerpt);
+    }
+
     public function render(): View|Closure|string
     {
         return view('components.markdown');

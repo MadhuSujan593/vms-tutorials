@@ -19,15 +19,26 @@
             }
         </script>
 
+        <!-- Branding & SEO -->
+        <meta name="theme-color" content="#4f46e5">
         <title><?php echo e($title ?? config('app.name', 'VMS Tutorials')); ?></title>
-        <meta name="description" content="<?php echo e($metaDescription ?? 'Expert coding tutorials for PHP, Java, JavaScript and more. Master modern development with VMS Tutorials.'); ?>">
+        
         <link rel="canonical" href="<?php echo e(url()->current()); ?>">
         
-        <!-- Open Graph -->
-        <meta property="og:title" content="<?php echo e($title ?? config('app.name', 'VMS Tutorials')); ?>">
-        <meta property="og:description" content="<?php echo e($metaDescription ?? 'Expert coding tutorials for PHP, Java, JavaScript and more.'); ?>">
-        <meta property="og:url" content="<?php echo e(url()->current()); ?>">
-        <meta property="og:type" content="website">
+        <?php echo $__env->yieldPushContent('meta'); ?>
+
+        <!-- Structured Data (JSON-LD) - Organization -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "VMS Tutorials",
+            "url": "<?php echo e(url('/')); ?>",
+            "logo": "<?php echo e(asset('img/logo.png')); ?>",
+            "description": "Professional coding tutorials for master developers."
+        }
+        </script>
+        <?php echo $__env->yieldPushContent('schema'); ?>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

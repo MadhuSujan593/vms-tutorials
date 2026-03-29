@@ -10,8 +10,67 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('title', null, []); ?> <?php echo e($tutorial->title); ?> - <?php echo e($category->name); ?> | VMS Tutorials <?php $__env->endSlot(); ?>
 
+    <?php $__env->startPush('meta'); ?>
+        <meta name="description" content="<?php echo e($metaDescription); ?>">
+        <meta property="og:title" content="<?php echo e($title); ?>">
+        <meta property="og:description" content="<?php echo e($metaDescription); ?>">
+        <meta name="twitter:card" content="summary_large_image">
+    <?php $__env->stopPush(); ?>
+
     <?php $__env->startPush('mobile_sidebar'); ?>
         <?php echo $__env->make('public.partials.tutorial_nav', ['navItems' => $allTutorials], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php $__env->stopPush(); ?>
+
+    <!-- Page Specific Structured Data -->
+    <?php $__env->startPush('schema'); ?>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "<?php echo e(url('/')); ?>"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "<?php echo e($category->name); ?>",
+            "item": "<?php echo e(route('public.category', $category)); ?>"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "<?php echo e($tutorial->title); ?>",
+            "item": "<?php echo e(url()->current()); ?>"
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "<?php echo e($tutorial->title); ?>",
+        "description": "<?php echo e($metaDescription); ?>",
+        "author": {
+            "@type": "Organization",
+            "name": "VMS Tutorials"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "VMS Tutorials",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "<?php echo e(asset('img/logo.png')); ?>"
+            }
+        },
+        "datePublished": "<?php echo e($tutorial->created_at->toIso8601String()); ?>",
+        "dateModified": "<?php echo e($tutorial->updated_at->toIso8601String()); ?>",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "<?php echo e(url()->current()); ?>"
+        }
+    }
+    </script>
     <?php $__env->stopPush(); ?>
 
     <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">

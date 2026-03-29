@@ -19,15 +19,26 @@
             }
         </script>
 
+        <!-- Branding & SEO -->
+        <meta name="theme-color" content="#4f46e5">
         <title>{{ $title ?? config('app.name', 'VMS Tutorials') }}</title>
-        <meta name="description" content="{{ $metaDescription ?? 'Expert coding tutorials for PHP, Java, JavaScript and more. Master modern development with VMS Tutorials.' }}">
+        
         <link rel="canonical" href="{{ url()->current() }}">
         
-        <!-- Open Graph -->
-        <meta property="og:title" content="{{ $title ?? config('app.name', 'VMS Tutorials') }}">
-        <meta property="og:description" content="{{ $metaDescription ?? 'Expert coding tutorials for PHP, Java, JavaScript and more.' }}">
-        <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:type" content="website">
+        @stack('meta')
+
+        <!-- Structured Data (JSON-LD) - Organization -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "VMS Tutorials",
+            "url": "{{ url('/') }}",
+            "logo": "{{ asset('img/logo.png') }}",
+            "description": "Professional coding tutorials for master developers."
+        }
+        </script>
+        @stack('schema')
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

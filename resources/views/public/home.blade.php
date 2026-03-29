@@ -1,4 +1,10 @@
 <x-public-layout>
+    @push('meta')
+        <meta name="description" content="Master modern technology with step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend and frontend brilliance.">
+        <meta property="og:title" content="VMS Tutorials - Master Modern Technology">
+        <meta property="og:description" content="Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more.">
+        <meta name="twitter:card" content="summary_large_image">
+    @endpush
     @push('mobile_sidebar')
         <div class="mb-6">
             <h3 class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3 px-2">

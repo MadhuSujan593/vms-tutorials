@@ -1,8 +1,67 @@
 <x-public-layout>
     <x-slot name="title">{{ $tutorial->title }} - {{ $category->name }} | VMS Tutorials</x-slot>
 
+    @push('meta')
+        <meta name="description" content="{{ $metaDescription }}">
+        <meta property="og:title" content="{{ $title }}">
+        <meta property="og:description" content="{{ $metaDescription }}">
+        <meta name="twitter:card" content="summary_large_image">
+    @endpush
+
     @push('mobile_sidebar')
         @include('public.partials.tutorial_nav', ['navItems' => $allTutorials])
+    @endpush
+
+    <!-- Page Specific Structured Data -->
+    @push('schema')
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ url('/') }}"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{ $category->name }}",
+            "item": "{{ route('public.category', $category) }}"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ $tutorial->title }}",
+            "item": "{{ url()->current() }}"
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "{{ $tutorial->title }}",
+        "description": "{{ $metaDescription }}",
+        "author": {
+            "@type": "Organization",
+            "name": "VMS Tutorials"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "VMS Tutorials",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ asset('img/logo.png') }}"
+            }
+        },
+        "datePublished": "{{ $tutorial->created_at->toIso8601String() }}",
+        "dateModified": "{{ $tutorial->updated_at->toIso8601String() }}",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "{{ url()->current() }}"
+        }
+    }
+    </script>
     @endpush
 
     <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">

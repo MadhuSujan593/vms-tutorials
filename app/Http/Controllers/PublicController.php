@@ -14,7 +14,11 @@ class PublicController extends Controller
         $categories = Category::withCount(['tutorials' => function($query) {
             $query->where('is_published', true);
         }])->orderBy('name')->get();
-        return view('public.home', compact('categories'));
+
+        $title = "VMS Tutorials - Master Modern Technology";
+        $metaDescription = "Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance with industry-standard guides.";
+
+        return view('public.home', compact('categories', 'title', 'metaDescription'));
     }
 
     public function category(Category $category)
@@ -27,8 +31,11 @@ class PublicController extends Controller
                               }])
                               ->orderBy('sort_order')
                               ->get();
+        
+        $title = $category->name . " Tutorials - Master " . $category->name . " Step-by-Step";
+        $metaDescription = $category->description ?? "Comprehensive tutorials and professional guides for " . $category->name . ". Learn from scratch and build real-world applications.";
                               
-        return view('public.category', compact('category', 'tutorials'));
+        return view('public.category', compact('category', 'tutorials', 'title', 'metaDescription'));
     }
 
     public function tutorial(Category $category, Tutorial $tutorial)
@@ -59,7 +66,10 @@ class PublicController extends Controller
                 $flattenedTutorials->push($c);
             }
         }
+
+        $title = $tutorial->title . " | " . $category->name . " Tutorial";
+        $metaDescription = \App\View\Components\Markdown::getExcerpt($tutorial->content);
         
-        return view('public.tutorial', compact('category', 'tutorial', 'allTutorials', 'flattenedTutorials'));
+        return view('public.tutorial', compact('category', 'tutorial', 'allTutorials', 'flattenedTutorials', 'title', 'metaDescription'));
     }
 }

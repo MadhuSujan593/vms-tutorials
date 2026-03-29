@@ -1,6 +1,46 @@
 <x-public-layout>
+    @push('meta')
+        <meta name="description" content="{{ $metaDescription }}">
+        <meta property="og:title" content="{{ $title }}">
+        <meta property="og:description" content="{{ $metaDescription }}">
+        <meta name="twitter:card" content="summary">
+    @endpush
+
     @push('mobile_sidebar')
         @include('public.partials.tutorial_nav', ['navItems' => $tutorials])
+    @endpush
+
+    <!-- Page Specific Structured Data -->
+    @push('schema')
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ url('/') }}"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{ $category->name }}",
+            "item": "{{ url()->current() }}"
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "{{ $category->name }} Tutorials",
+        "description": "{{ $metaDescription }}",
+        "publisher": {
+            "@type": "Organization",
+            "name": "VMS Tutorials"
+        }
+    }
+    </script>
     @endpush
     <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-8 sm:pt-12 pb-16 sm:pb-24">
         <div class="mb-12">
