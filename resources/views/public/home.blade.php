@@ -47,11 +47,12 @@
                     <div>
                         <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-105 transition-transform duration-300 shadow-md shadow-indigo-600/30 overflow-hidden">
                             @if($category->icon)
-                                <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }}" class="w-full h-full object-cover">
-                            @else
-                                <!-- Icon Placeholder - Letter of Category -->
-                                <span class="text-xl font-bold uppercase">{{ substr($category->name, 0, 1) }}</span>
-                            @endif
+                            <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }} icon" class="w-full h-full object-cover">
+                        @else
+                            <!-- Icon Placeholder - Letter of Category -->
+                            <span class="text-xl font-bold uppercase" aria-hidden="true">{{ substr($category->name, 0, 1) }}</span>
+                            <span class="sr-only">{{ $category->name }} category placeholder</span>
+                        @endif
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
                             {{ $category->name }}

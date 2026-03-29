@@ -46,6 +46,9 @@
         
         <!-- PrismJS for Code Highlighting -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+        
+        <!-- Favicon (Best Practice) -->
+        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -105,7 +108,9 @@
                 <div class="flex justify-between h-16">
                     <div class="flex items-center gap-4">
                         <!-- Hamburger Menu (Mobile Only) -->
-                        <button @click="mobileMenuOpen = true" class="lg:hidden p-2 -ml-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none">
+                        <button @click="mobileMenuOpen = true" 
+                                class="lg:hidden p-2 -ml-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+                                aria-label="Open navigation menu">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                         </button>
 
@@ -119,7 +124,8 @@
                         <!-- Dark Mode Toggle -->
                         <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)" 
                                 class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all focus:outline-none"
-                                title="Toggle Dark/Light Mode">
+                                title="Toggle Dark/Light Mode"
+                                aria-label="Toggle visual theme">
                             <template x-if="!darkMode">
                                 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                             </template>
@@ -165,7 +171,9 @@
                                 <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS</span>
                                 <span class="dark:text-white">Tutorials</span>
                             </div>
-                            <button @click="mobileMenuOpen = false" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none">
+                            <button @click="mobileMenuOpen = false" 
+                                    class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+                                    aria-label="Close navigation menu">
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
@@ -188,11 +196,11 @@
             </div>
         </footer>
 
-        <!-- PrismJS Scripts -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+        <!-- PrismJS Scripts (Best Practice: defer) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js" defer></script>
         
         <script>
             // Initialize Copy Buttons
@@ -210,6 +218,7 @@
                     const button = document.createElement('button');
                     button.className = 'copy-btn';
                     button.innerText = 'Copy';
+                    button.setAttribute('aria-label', 'Copy code to clipboard');
                     pre.appendChild(button);
 
                     button.addEventListener('click', () => {

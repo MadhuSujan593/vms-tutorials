@@ -8,7 +8,50 @@
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-24">
+    <?php $__env->startPush('meta'); ?>
+        <meta name="description" content="<?php echo e($metaDescription); ?>">
+        <meta property="og:title" content="<?php echo e($title); ?>">
+        <meta property="og:description" content="<?php echo e($metaDescription); ?>">
+        <meta name="twitter:card" content="summary">
+    <?php $__env->stopPush(); ?>
+
+    <?php $__env->startPush('mobile_sidebar'); ?>
+        <?php echo $__env->make('public.partials.tutorial_nav', ['navItems' => $tutorials], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php $__env->stopPush(); ?>
+
+    <!-- Page Specific Structured Data -->
+    <?php $__env->startPush('schema'); ?>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "<?php echo e(url('/')); ?>"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "<?php echo e($category->name); ?>",
+            "item": "<?php echo e(url()->current()); ?>"
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "<?php echo e($category->name); ?> Tutorials",
+        "description": "<?php echo e($metaDescription); ?>",
+        "publisher": {
+            "@type": "Organization",
+            "name": "VMS Tutorials"
+        }
+    }
+    </script>
+    <?php $__env->stopPush(); ?>
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-8 sm:pt-12 pb-16 sm:pb-24">
         <div class="mb-12">
             <nav class="flex mb-8" aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-4">
@@ -42,7 +85,7 @@
                 <a href="<?php echo e(route('public.tutorial', [$category->slug, $tutorial->slug])); ?>" class="group bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500/50 hover:shadow-md transition-all flex items-center gap-3">
                     <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 overflow-hidden">
                         <?php if($category->icon): ?>
-                            <img src="<?php echo e(asset('storage/' . $category->icon)); ?>" alt="<?php echo e($category->name); ?>" class="w-full h-full object-cover">
+                            <img src="<?php echo e(asset('storage/' . $category->icon)); ?>" alt="<?php echo e($category->name); ?> icon" class="w-full h-full object-cover">
                         <?php else: ?>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         <?php endif; ?>

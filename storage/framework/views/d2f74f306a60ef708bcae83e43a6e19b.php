@@ -2,12 +2,14 @@
     <h3 class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
         <?php echo e($category->name); ?> Tutorials
     </h3>
-    <nav class="space-y-1" x-data="{ openSection: <?php echo json_encode(($tutorial->parent_id ?? ($tutorial->id ?? 0)), 15, 512) ?> }">
+    <nav class="space-y-1" x-data="{ openSection: <?php echo json_encode(isset($tutorial) ? ($tutorial->parent_id ?? $tutorial->id) : 0, 15, 512) ?> }">
         <?php $__currentLoopData = $navItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="relative">
                 <?php 
                     $hasChildren = $item->children->count() > 0;
-                    $isActiveParent = ($tutorial->id === $item->id || $tutorial->parent_id === $item->id);
+                    $currentId = $tutorial->id ?? 0;
+                    $currentParentId = $tutorial->parent_id ?? 0;
+                    $isActiveParent = ($currentId === $item->id || $currentParentId === $item->id);
                     $linkTarget = $hasChildren ? $item->children->first() : $item;
                 ?>
 
@@ -41,7 +43,7 @@
                             <a href="<?php echo e(route('public.tutorial', [$category->slug, $child->slug])); ?>" 
                                @click="mobileMenuOpen = false"
                                class="group flex items-center px-2.5 py-1.5 text-[13px] font-medium rounded-lg transition-all duration-200 
-                               <?php echo e($tutorial->id === $child->id 
+                               <?php echo e((isset($tutorial) && $tutorial->id === $child->id) 
                                   ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10' 
                                   : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'); ?>">
                                 <span class="truncate"><?php echo e($child->title); ?></span>

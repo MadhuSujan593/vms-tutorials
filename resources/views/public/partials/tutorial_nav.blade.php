@@ -2,12 +2,14 @@
     <h3 class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
         {{ $category->name }} Tutorials
     </h3>
-    <nav class="space-y-1" x-data="{ openSection: @json(($tutorial->parent_id ?? ($tutorial->id ?? 0))) }">
+    <nav class="space-y-1" x-data="{ openSection: @json(isset($tutorial) ? ($tutorial->parent_id ?? $tutorial->id) : 0) }">
         @foreach($navItems as $item)
             <div class="relative">
                 @php 
                     $hasChildren = $item->children->count() > 0;
-                    $isActiveParent = ($tutorial->id === $item->id || $tutorial->parent_id === $item->id);
+                    $currentId = $tutorial->id ?? 0;
+                    $currentParentId = $tutorial->parent_id ?? 0;
+                    $isActiveParent = ($currentId === $item->id || $currentParentId === $item->id);
                     $linkTarget = $hasChildren ? $item->children->first() : $item;
                 @endphp
 
@@ -41,7 +43,7 @@
                             <a href="{{ route('public.tutorial', [$category->slug, $child->slug]) }}" 
                                @click="mobileMenuOpen = false"
                                class="group flex items-center px-2.5 py-1.5 text-[13px] font-medium rounded-lg transition-all duration-200 
-                               {{ $tutorial->id === $child->id 
+                               {{ (isset($tutorial) && $tutorial->id === $child->id) 
                                   ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10' 
                                   : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white' }}">
                                 <span class="truncate">{{ $child->title }}</span>
