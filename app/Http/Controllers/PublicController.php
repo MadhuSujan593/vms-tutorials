@@ -19,7 +19,15 @@ class PublicController extends Controller
 
     public function category(Category $category)
     {
-        $tutorials = $category->tutorials()->where('is_published', true)->orderBy('sort_order')->get();
+        $tutorials = $category->tutorials()
+                              ->where('is_published', true)
+                              ->whereNull('parent_id')
+                              ->with(['children' => function($q) {
+                                  $q->where('is_published', true)->orderBy('sort_order');
+                              }])
+                              ->orderBy('sort_order')
+                              ->get();
+                              
         return view('public.category', compact('category', 'tutorials'));
     }
 
@@ -29,8 +37,29 @@ class PublicController extends Controller
             abort(404);
         }
 
-        $allTutorials = $category->tutorials()->where('is_published', true)->orderBy('sort_order')->get();
+        // If this is a parent and has children, redirect to the first child for consistency
+        if ($tutorial->parent_id === null && $tutorial->children()->where('is_published', true)->exists()) {
+            $firstChild = $tutorial->children()->where('is_published', true)->orderBy('sort_order')->first();
+            return redirect()->route('public.tutorial', [$category->slug, $firstChild->slug]);
+        }
+
+        $allTutorials = $category->tutorials()
+                                 ->where('is_published', true)
+                                 ->whereNull('parent_id')
+                                 ->with(['children' => function($q) {
+                                     $q->where('is_published', true)->orderBy('sort_order');
+                                 }])
+                                 ->orderBy('sort_order')
+                                 ->get();
         
-        return view('public.tutorial', compact('category', 'tutorial', 'allTutorials'));
+        $flattenedTutorials = collect();
+        foreach($allTutorials as $t) {
+            $flattenedTutorials->push($t);
+            foreach($t->children as $c) {
+                $flattenedTutorials->push($c);
+            }
+        }
+        
+        return view('public.tutorial', compact('category', 'tutorial', 'allTutorials', 'flattenedTutorials'));
     }
 }

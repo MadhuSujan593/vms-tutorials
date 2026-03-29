@@ -38,6 +38,11 @@ Route::get('/sitemap.xml', function () {
             
         // Add Tutorials inside this category
         $category->tutorials()->where('is_published', true)->get()->each(function (Tutorial $tutorial) use ($sitemap, $category) {
+            // Skip top-level parents that redirect to first child (they don't have their own accessible content)
+            if ($tutorial->parent_id === null && $tutorial->children()->where('is_published', true)->exists()) {
+                return;
+            }
+            
             $sitemap->add(Url::create(route('public.tutorial', [$category->slug, $tutorial->slug]))
                 ->setPriority(0.6)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));

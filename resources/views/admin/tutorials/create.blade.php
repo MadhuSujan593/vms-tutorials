@@ -47,12 +47,29 @@
                     <form method="POST" action="{{ route('admin.categories.tutorials.store', $category) }}">
                         @csrf
                         
-                        <div class="mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <!-- Title -->
                             <div>
                                 <label for="title" class="block text-sm font-medium text-gray-700">Tutorial Title</label>
                                 <input type="text" name="title" id="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-lg" value="{{ old('title') }}" placeholder="Enter an engaging title...">
                                 @error('title')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Parent Selection -->
+                            <div>
+                                <label for="parent_id" class="block text-sm font-medium text-gray-700">Parent Section (Optional)</label>
+                                <select name="parent_id" id="parent_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 sm:text-md">
+                                    <option value="">-- Main Topic (Top Level) --</option>
+                                    @foreach($parents as $parent)
+                                        <option value="{{ $parent->id }}" {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
+                                            {{ $parent->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <p class="text-xs text-gray-400 mt-1 italic">Leave empty to make this a top-level category.</p>
+                                @error('parent_id')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>

@@ -12,13 +12,19 @@ class TutorialController extends Controller
 {
     public function index(Category $category)
     {
-        $tutorials = $category->tutorials()->orderBy('sort_order')->orderBy('created_at')->paginate(100);
+        $tutorials = $category->tutorials()
+                              ->whereNull('parent_id')
+                              ->with('children')
+                              ->orderBy('sort_order')
+                              ->get();
+                              
         return view('admin.tutorials.index', compact('tutorials', 'category'));
     }
 
     public function create(Category $category)
     {
-        return view('admin.tutorials.create', compact('category'));
+        $parents = $category->tutorials()->whereNull('parent_id')->orderBy('sort_order')->get();
+        return view('admin.tutorials.create', compact('category', 'parents'));
     }
 
     public function store(Request $request, Category $category)
@@ -26,13 +32,16 @@ class TutorialController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'parent_id' => 'nullable|exists:tutorials,id'
         ]);
 
         $validated['category_id'] = $category->id;
         $validated['is_published'] = $request->boolean('is_published');
         
-        // Set sort order to the end
-        $maxOrder = Tutorial::where('category_id', $category->id)->max('sort_order');
+        // Set sort order to the end of the specific level
+        $maxOrder = Tutorial::where('category_id', $category->id)
+                            ->where('parent_id', $request->parent_id)
+                            ->max('sort_order');
         $validated['sort_order'] = $maxOrder !== null ? $maxOrder + 1 : 0;
 
         Tutorial::create($validated);
@@ -47,7 +56,12 @@ class TutorialController extends Controller
 
     public function edit(Category $category, Tutorial $tutorial)
     {
-        return view('admin.tutorials.edit', compact('category', 'tutorial'));
+        $parents = $category->tutorials()
+                            ->whereNull('parent_id')
+                            ->where('id', '!=', $tutorial->id)
+                            ->orderBy('sort_order')
+                            ->get();
+        return view('admin.tutorials.edit', compact('category', 'tutorial', 'parents'));
     }
 
     public function update(Request $request, Category $category, Tutorial $tutorial)
@@ -55,6 +69,7 @@ class TutorialController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'parent_id' => 'nullable|exists:tutorials,id'
         ]);
 
         $validated['is_published'] = $request->boolean('is_published');

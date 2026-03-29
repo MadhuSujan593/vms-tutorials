@@ -10,11 +10,11 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('header', null, []); ?> 
         <div class="flex items-center">
-            <a href="<?php echo e(route('admin.tutorials.index')); ?>" class="text-indigo-600 hover:text-indigo-900 mr-4">
+            <a href="<?php echo e(route('admin.categories.tutorials.index', $category)); ?>" class="text-indigo-600 hover:text-indigo-900 mr-4">
                 &larr; Back
             </a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <?php echo e(__('Create Tutorial')); ?>
+                <?php echo e(__('Create Tutorial in ')); ?> <?php echo e($category->name); ?>
 
             </h2>
         </div>
@@ -54,12 +54,12 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="<?php echo e(route('admin.tutorials.store')); ?>">
+                    <form method="POST" action="<?php echo e(route('admin.categories.tutorials.store', $category)); ?>">
                         <?php echo csrf_field(); ?>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <!-- Title -->
-                            <div class="md:col-span-2">
+                            <div>
                                 <label for="title" class="block text-sm font-medium text-gray-700">Tutorial Title</label>
                                 <input type="text" name="title" id="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-lg" value="<?php echo e(old('title')); ?>" placeholder="Enter an engaging title...">
                                 <?php $__errorArgs = ['title'];
@@ -74,19 +74,20 @@ endif;
 unset($__errorArgs, $__bag); ?>
                             </div>
 
-                            <!-- Category -->
+                            <!-- Parent Selection -->
                             <div>
-                                <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-                                <select name="category_id" id="category_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-md">
-                                    <option value="" disabled selected>Select a category</option>
-                                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($category->id); ?>" <?php echo e(old('category_id') == $category->id ? 'selected' : ''); ?>>
-                                            <?php echo e($category->name); ?>
+                                <label for="parent_id" class="block text-sm font-medium text-gray-700">Parent Section (Optional)</label>
+                                <select name="parent_id" id="parent_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 sm:text-md">
+                                    <option value="">-- Main Topic (Top Level) --</option>
+                                    <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $parent): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($parent->id); ?>" <?php echo e(old('parent_id') == $parent->id ? 'selected' : ''); ?>>
+                                            <?php echo e($parent->title); ?>
 
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                <?php $__errorArgs = ['category_id'];
+                                <p class="text-xs text-gray-400 mt-1 italic">Leave empty to make this a top-level category.</p>
+                                <?php $__errorArgs = ['parent_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }

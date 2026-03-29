@@ -62,49 +62,12 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="sortable-tutorials">
                                 <?php $__empty_1 = true; $__currentLoopData = $tutorials; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tutorial): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                <tr data-id="<?php echo e($tutorial->id); ?>" class="sortable-row">
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                        <div class="cursor-move text-gray-400 hover:text-gray-600 drag-handle">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path></svg>
-                                        </div>
-                                    </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                        <p class="text-gray-900 whitespace-no-wrap font-medium">
-                                            <?php echo e($tutorial->title); ?>
-
-                                        </p>
-                                    </td>
-
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                        <?php if($tutorial->is_published): ?>
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                                <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                                <span class="relative">Published</span>
-                                            </span>
-                                        <?php else: ?>
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                                                <span aria-hidden class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
-                                                <span class="relative">Draft</span>
-                                            </span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                        <p class="text-gray-500 whitespace-no-wrap">
-                                            <?php echo e($tutorial->created_at->format('M d, Y')); ?>
-
-                                        </p>
-                                    </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                                        <a href="<?php echo e(route('admin.categories.tutorials.edit', [$category, $tutorial])); ?>" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                                        <form action="<?php echo e(route('admin.categories.tutorials.destroy', [$category, $tutorial])); ?>" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this tutorial?');">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('DELETE'); ?>
-                                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                    <?php echo $__env->make('admin.tutorials._row', ['tutorial' => $tutorial, 'level' => 0], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                    <?php $__currentLoopData = $tutorial->children; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php echo $__env->make('admin.tutorials._row', ['tutorial' => $child, 'level' => 1], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <tr>
                                     <td colspan="5" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center text-gray-500">
@@ -116,10 +79,7 @@
                         </table>
                     </div>
                     
-                    <div class="mt-4">
-                        <?php echo e($tutorials->links()); ?>
-
-                    </div>
+                    
                 </div>
             </div>
         </div>
