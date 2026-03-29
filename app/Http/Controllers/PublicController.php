@@ -13,13 +13,13 @@ class PublicController extends Controller
     {
         $categories = Category::withCount(['tutorials' => function($query) {
             $query->where('is_published', true);
-        }])->get();
+        }])->orderBy('name')->get();
         return view('public.home', compact('categories'));
     }
 
     public function category(Category $category)
     {
-        $tutorials = $category->tutorials()->where('is_published', true)->get();
+        $tutorials = $category->tutorials()->where('is_published', true)->orderBy('sort_order')->get();
         return view('public.category', compact('category', 'tutorials'));
     }
 
@@ -29,7 +29,7 @@ class PublicController extends Controller
             abort(404);
         }
 
-        $allTutorials = $category->tutorials()->where('is_published', true)->orderBy('created_at')->get();
+        $allTutorials = $category->tutorials()->where('is_published', true)->orderBy('sort_order')->get();
         
         return view('public.tutorial', compact('category', 'tutorial', 'allTutorials'));
     }

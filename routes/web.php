@@ -62,7 +62,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
-    Route::resource('tutorials', TutorialController::class);
+    Route::put('categories/{category}/tutorials/reorder', [TutorialController::class, 'reorder'])->name('categories.tutorials.reorder');
+    Route::resource('categories.tutorials', TutorialController::class);
 });
 
 require __DIR__.'/auth.php';

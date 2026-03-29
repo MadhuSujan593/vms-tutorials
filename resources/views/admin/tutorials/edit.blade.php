@@ -2,11 +2,11 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <a href="{{ route('admin.tutorials.index') }}" class="text-indigo-600 hover:text-indigo-900 mr-4">
+                <a href="{{ route('admin.categories.tutorials.index', $category) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">
                     &larr; Back
                 </a>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ __('Edit Tutorial') }}: {{ $tutorial->title }}
+                    {{ __('Edit Tutorial in ') }} {{ $category->name }}: {{ $tutorial->title }}
                 </h2>
             </div>
         </div>
@@ -46,35 +46,20 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 border-b border-gray-200">
-                    <form method="POST" action="{{ route('admin.tutorials.update', $tutorial) }}">
+                    <form method="POST" action="{{ route('admin.categories.tutorials.update', [$category, $tutorial]) }}">
                         @csrf
                         @method('PUT')
                         
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="mb-6">
                             <!-- Title -->
-                            <div class="md:col-span-2">
+                            <div>
                                 <label for="title" class="block text-sm font-medium text-gray-700">Tutorial Title</label>
                                 <input type="text" name="title" id="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-lg" value="{{ old('title', $tutorial->title) }}">
                                 @error('title')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-
-                            <!-- Category -->
-                            <div>
-                                <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-                                <select name="category_id" id="category_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-md">
-                                    <option value="" disabled>Select a category</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ (old('category_id', $tutorial->category_id) == $category->id) ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
+                        </div>
 
                             <!-- Slug (Display only) -->
                             <div class="md:col-span-3">

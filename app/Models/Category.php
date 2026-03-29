@@ -23,6 +23,6 @@ class Category extends Model
 
     public function tutorials()
     {
-        return $this->hasMany(Tutorial::class);
+        return $this->hasMany(Tutorial::class)->orderBy('sort_order');
     }
 }

@@ -12,7 +12,7 @@ class Tutorial extends Model
 {
     use HasFactory, HasSlug;
 
-    protected $fillable = ['category_id', 'title', 'slug', 'content', 'is_published'];
+    protected $fillable = ['category_id', 'title', 'slug', 'content', 'is_published', 'sort_order'];
 
     protected $casts = [
         'is_published' => 'boolean',

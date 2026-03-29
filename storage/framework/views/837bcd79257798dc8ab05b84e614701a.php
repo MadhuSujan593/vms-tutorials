@@ -84,6 +84,7 @@
                                         </p>
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                                        <a href="<?php echo e(route('admin.categories.tutorials.index', $category)); ?>" class="text-emerald-600 hover:text-emerald-900 mr-3 font-medium">Tutorials</a>
                                         <a href="<?php echo e(route('admin.categories.edit', $category)); ?>" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
                                         <form action="<?php echo e(route('admin.categories.destroy', $category)); ?>" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                             <?php echo csrf_field(); ?>

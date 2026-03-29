@@ -10,60 +10,78 @@ use App\Models\Category;
 
 class TutorialController extends Controller
 {
-    public function index()
+    public function index(Category $category)
     {
-        $tutorials = Tutorial::with('category')->latest()->paginate(10);
-        return view('admin.tutorials.index', compact('tutorials'));
+        $tutorials = $category->tutorials()->orderBy('sort_order')->orderBy('created_at')->paginate(100);
+        return view('admin.tutorials.index', compact('tutorials', 'category'));
     }
 
-    public function create()
+    public function create(Category $category)
     {
-        $categories = Category::all();
-        return view('admin.tutorials.create', compact('categories'));
+        return view('admin.tutorials.create', compact('category'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Category $category)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
             'content' => 'required|string',
         ]);
 
+        $validated['category_id'] = $category->id;
         $validated['is_published'] = $request->boolean('is_published');
+        
+        // Set sort order to the end
+        $maxOrder = Tutorial::where('category_id', $category->id)->max('sort_order');
+        $validated['sort_order'] = $maxOrder !== null ? $maxOrder + 1 : 0;
+
         Tutorial::create($validated);
         
-        return redirect()->route('admin.tutorials.index')->with('success', 'Tutorial created successfully.');
+        return redirect()->route('admin.categories.tutorials.index', $category)->with('success', 'Tutorial created successfully.');
     }
 
-    public function show(Tutorial $tutorial)
+    public function show(Category $category, Tutorial $tutorial)
     {
-        return view('admin.tutorials.show', compact('tutorial'));
+        return view('admin.tutorials.show', compact('category', 'tutorial'));
     }
 
-    public function edit(Tutorial $tutorial)
+    public function edit(Category $category, Tutorial $tutorial)
     {
-        $categories = Category::all();
-        return view('admin.tutorials.edit', compact('tutorial', 'categories'));
+        return view('admin.tutorials.edit', compact('category', 'tutorial'));
     }
 
-    public function update(Request $request, Tutorial $tutorial)
+    public function update(Request $request, Category $category, Tutorial $tutorial)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
             'content' => 'required|string',
         ]);
 
         $validated['is_published'] = $request->boolean('is_published');
         $tutorial->update($validated);
         
-        return redirect()->route('admin.tutorials.index')->with('success', 'Tutorial updated successfully.');
+        return redirect()->route('admin.categories.tutorials.index', $category)->with('success', 'Tutorial updated successfully.');
     }
 
-    public function destroy(Tutorial $tutorial)
+    public function destroy(Category $category, Tutorial $tutorial)
     {
         $tutorial->delete();
-        return redirect()->route('admin.tutorials.index')->with('success', 'Tutorial deleted successfully.');
+        return redirect()->route('admin.categories.tutorials.index', $category)->with('success', 'Tutorial deleted successfully.');
+    }
+
+    public function reorder(Request $request, Category $category)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:tutorials,id'
+        ]);
+
+        foreach ($request->ids as $index => $id) {
+            Tutorial::where('id', $id)
+                    ->where('category_id', $category->id)
+                    ->update(['sort_order' => $index]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }
