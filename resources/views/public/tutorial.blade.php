@@ -130,7 +130,6 @@
                         <div class="flex-1"></div>
                     @endif
                 </div>
-                @include('public.partials.banner', ['banners' => $banners])
             </main>
 
             <!-- Right Sidebar (TOC) -->
