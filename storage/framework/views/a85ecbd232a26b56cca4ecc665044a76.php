@@ -30,7 +30,7 @@
                         <!-- Name -->
                         <div class="mb-4">
                             <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
-                            <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-sm" value="<?php echo e(old('name')); ?>" placeholder="e.g. Laravel Basics">
+                            <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-sm" value="<?php echo e(old('name')); ?>" placeholder="e.g. Python">
                             <?php $__errorArgs = ['name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

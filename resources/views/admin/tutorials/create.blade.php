@@ -128,7 +128,7 @@
                     },
                     placeholder: "Paste your W3Schools content here...",
                     toolbar: [
-                        "bold", "italic", "heading", "|", 
+                        "bold", "italic", "|", "heading-1", "heading-2", "heading-3", "|", 
                         "quote", "unordered-list", "ordered-list", "|", 
                         "link", "image", "code", "table", "|", 
                         "preview", "side-by-side", "fullscreen", "|", 
