@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Tutorial;
 use App\Models\Banner;
+use App\Models\Course;
 
 class PublicController extends Controller
 {
@@ -22,10 +23,11 @@ class PublicController extends Controller
         }])->orderBy('name')->get();
 
         $banners = $this->getActiveBanners();
+        $courses = Course::where('is_active', true)->orderBy('sort_order')->orderBy('created_at', 'desc')->get();
         $title = "VMS Tutorials - Master Modern Technology";
         $metaDescription = "Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance with industry-standard guides.";
 
-        return view('public.home', compact('categories', 'banners', 'title', 'metaDescription'));
+        return view('public.home', compact('categories', 'banners', 'courses', 'title', 'metaDescription'));
     }
 
     public function category(Category $category)
@@ -80,5 +82,33 @@ class PublicController extends Controller
         $metaDescription = \App\View\Components\Markdown::getExcerpt($tutorial->content);
         
         return view('public.tutorial', compact('category', 'tutorial', 'allTutorials', 'flattenedTutorials', 'banners', 'title', 'metaDescription'));
+    }
+
+    public function about()
+    {
+        $title = "About Us | VMS Tutorials";
+        $metaDescription = "Learn more about VMS Tutorials, our mission to provide high-quality coding education, and the team behind the brilliance.";
+        return view('public.about', compact('title', 'metaDescription'));
+    }
+
+    public function contact()
+    {
+        $title = "Contact Us | VMS Tutorials";
+        $metaDescription = "Get in touch with the VMS Tutorials team. We're here to answer your questions and help you on your learning journey.";
+        return view('public.contact', compact('title', 'metaDescription'));
+    }
+
+    public function courses()
+    {
+        $courses = Course::where('is_active', true)->orderBy('sort_order')->orderBy('created_at', 'desc')->paginate(12);
+        $title = "Our Courses | VMS Tutorials";
+        $metaDescription = "Explore our premium coding courses. Master modern technologies with professional, high-quality video and text-based guides.";
+        return view('public.courses', compact('courses', 'title', 'metaDescription'));
+    }
+    public function donate()
+    {
+        $title = "Support VMS Tutorials | Donate";
+        $metaDescription = "Support our mission to provide high-quality technology education. Your donations help us keep our content free and up-to-date.";
+        return view('public.donate', compact('title', 'metaDescription'));
     }
 }

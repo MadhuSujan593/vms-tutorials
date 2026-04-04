@@ -23,6 +23,10 @@ use App\Http\Controllers\PublicController;
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/tutorials/{category:slug}', [PublicController::class, 'category'])->name('public.category');
 Route::get('/tutorials/{category:slug}/{tutorial:slug}', [PublicController::class, 'tutorial'])->name('public.tutorial');
+Route::get('/courses', [PublicController::class, 'courses'])->name('public.courses');
+Route::get('/about-us', [PublicController::class, 'about'])->name('public.about');
+Route::get('/contact-us', [PublicController::class, 'contact'])->name('public.contact');
+Route::get('/donate', [PublicController::class, 'donate'])->name('public.donate');
 
 Route::get('/sitemap.xml', function () {
     $sitemap = \Spatie\Sitemap\Sitemap::create();
@@ -59,6 +63,7 @@ Route::get('/dashboard', [AdminController::class, 'dashboard'])->middleware(['au
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TutorialController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\UserController;
 
 Route::middleware('auth')->group(function () {
@@ -72,6 +77,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::put('categories/{category}/tutorials/reorder', [TutorialController::class, 'reorder'])->name('categories.tutorials.reorder');
     Route::resource('categories.tutorials', TutorialController::class);
     Route::resource('banners', BannerController::class);
+    Route::resource('courses', CourseController::class);
     Route::resource('users', UserController::class);
 });
 

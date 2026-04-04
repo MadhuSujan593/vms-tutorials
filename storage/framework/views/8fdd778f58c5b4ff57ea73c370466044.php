@@ -120,7 +120,13 @@
                         </a>
                     </div>
 
-                    <div class="flex items-center gap-4">
+                        <div class="hidden sm:flex items-center gap-6 mr-6">
+                            <a href="<?php echo e(route('public.courses')); ?>" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300">Courses</a>
+                            <a href="<?php echo e(route('public.about')); ?>" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About Us</a>
+                            <a href="<?php echo e(route('public.contact')); ?>" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact Us</a>
+                            <a href="<?php echo e(route('public.donate')); ?>" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Donate</a>
+                        </div>
+
                         <!-- Dark Mode Toggle -->
                         <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)" 
                                 class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all focus:outline-none"
@@ -177,7 +183,11 @@
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
-                        <nav x-data="{ openSection: <?php echo json_encode(isset($tutorial) ? $tutorial->id : 0, 15, 512) ?> }" class="mt-5 px-4 space-y-1">
+                        <nav class="mt-5 px-4 space-y-1">
+                                <a href="<?php echo e(route('public.courses')); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Courses</a>
+                                <a href="<?php echo e(route('public.about')); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">About Us</a>
+                                <a href="<?php echo e(route('public.contact')); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Contact Us</a>
+                                <a href="<?php echo e(route('public.donate')); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Donate</a>
                             <?php echo $__env->yieldPushContent('mobile_sidebar'); ?>
                         </nav>
                     </div>
@@ -191,9 +201,19 @@
         </main>
 
         <!-- Dynamic Footer -->
-        <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-12 mt-12">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
-                <p>&copy; <?php echo e(date('Y')); ?> VMS Tutorials. All rights reserved.</p>
+        <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-10 mt-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="flex flex-col items-center gap-4">
+                    <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+                        <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS</span>
+                        <span class="dark:text-white">Tutorials</span>
+                    </div>
+                    <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                        &copy; <?php echo e(date('Y')); ?> VMS Tutorials. All rights reserved. 
+                        <span class="mx-2 text-gray-300 dark:text-gray-700">|</span> 
+                        <a href="<?php echo e(route('public.donate')); ?>" class="hover:text-indigo-600 transition-colors underline decoration-indigo-200 dark:decoration-indigo-900 underline-offset-4">Support our mission</a>
+                    </div>
+                </div>
             </div>
         </footer>
 
