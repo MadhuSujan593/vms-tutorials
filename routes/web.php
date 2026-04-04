@@ -59,6 +59,7 @@ Route::get('/dashboard', [AdminController::class, 'dashboard'])->middleware(['au
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TutorialController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -71,6 +72,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::put('categories/{category}/tutorials/reorder', [TutorialController::class, 'reorder'])->name('categories.tutorials.reorder');
     Route::resource('categories.tutorials', TutorialController::class);
     Route::resource('banners', BannerController::class);
+    Route::resource('users', UserController::class);
 });
 
 require __DIR__.'/auth.php';

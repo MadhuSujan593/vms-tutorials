@@ -22,7 +22,7 @@
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <!-- Analytics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Categories Stat Card -->
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 group hover:border-indigo-500 transition-all duration-300">
                     <div class="flex items-center justify-between">
@@ -61,6 +61,19 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Users Stat Card -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 group hover:border-indigo-500 transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Administrators</p>
+                            <h3 class="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">{{ $stats['users'] }}</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Management Section -->
@@ -72,7 +85,7 @@
                         <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest mt-1">Management Tools</p>
                     </div>
                 </div>
-                <div class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                     <!-- New Category -->
                     <a href="{{ route('admin.categories.create') }}" class="group p-6 bg-white dark:bg-gray-900/20 rounded-2xl border border-gray-50 dark:border-gray-800 hover:border-indigo-500 hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 flex flex-col items-center text-center gap-4">
                         <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm">
@@ -103,6 +116,14 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </div>
                         <span class="text-xs font-black text-gray-900 dark:text-white uppercase italic tracking-tight">Public Site</span>
+                    </a>
+
+                    <!-- New User -->
+                    <a href="{{ route('admin.users.create') }}" class="group p-6 bg-white dark:bg-gray-900/20 rounded-2xl border border-gray-50 dark:border-gray-800 hover:border-indigo-500 hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 flex flex-col items-center text-center gap-4">
+                        <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                        </div>
+                        <span class="text-xs font-black text-gray-900 dark:text-white uppercase italic tracking-tight">New User</span>
                     </a>
                 </div>
             </div>
