@@ -15,10 +15,10 @@ class AdminUserSeeder extends Seeder
     {
         // Create a default administrator
         User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => 'contactvmsclass@gmail.com'],
             [
                 'name' => 'Admin User',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('vmsclass@123'),
                 'email_verified_at' => now(),
             ]
         );
