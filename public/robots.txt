@@ -3,4 +3,4 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /profile/
 
-Sitemap: http://127.0.0.1:8000/sitemap.xml
+Sitemap: https://vmstutorials.com/sitemap.xml
