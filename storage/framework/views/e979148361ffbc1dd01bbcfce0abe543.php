@@ -12,27 +12,30 @@
 
     <!-- Hero Section -->
     <div class="relative py-24 overflow-hidden bg-white dark:bg-gray-900 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative">
-            <nav class="flex mb-12 text-xs font-medium" aria-label="Breadcrumb">
-                <ol class="flex items-center space-x-2">
-                    <li><a href="<?php echo e(route('home')); ?>" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Home</a></li>
-                    <li class="flex items-center gap-2">
-                        <svg class="h-4 w-4 text-gray-300 dark:text-gray-700" fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" /></svg>
-                        <span class="text-gray-400">About Us</span>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative text-center flex flex-col items-center">
+            <nav class="flex mb-10 text-[10px] font-bold uppercase tracking-widest" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-3">
+                    <li><a href="<?php echo e(route('home')); ?>" class="text-gray-400 hover:text-indigo-600 transition-colors">Home</a></li>
+                    <li class="flex items-center gap-3">
+                        <span class="text-gray-300 dark:text-gray-700">/</span>
+                        <span class="text-gray-500">About Us</span>
                     </li>
                 </ol>
             </nav>
-
-            <div class="max-w-4xl">
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-8 leading-[1.1]">
-                    Empowering the <span class="text-indigo-600">Next Generation</span> of Developers.
+            
+            <div class="max-w-3xl">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white tracking-tighter mb-8 leading-[1.1]">
+                    We Help to <span class="text-indigo-600">Train</span> and Lead <span class="text-indigo-600">Consultant</span> Projects.
                 </h1>
-                <p class="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-10 max-w-3xl">
-                    VMS Tutorials is more than just a documentation site. It's a professional ecosystem designed to turn complex instructions into clear, actionable knowledge.
+                <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                    VMS Tutorials is dedicated to bridging the gap between theoretical knowledge and industry execution. We specialize in comprehensive developer training, providing the technical foundation required to master modern stacks and excel in professional environments.
                 </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="<?php echo e(route('public.courses')); ?>" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition-all shadow-lg hover:shadow-indigo-500/25">Explore Courses</a>
-                    <a href="<?php echo e(route('public.contact')); ?>" class="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all">Get in Touch</a>
+                <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-10">
+                    Beyond education, we partner with organizations to deliver high-impact consultant projects. Our team brings expert-level insights to every collaboration, ensuring that your technical architecture is scalable, secure, and built using the latest industry standards.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="<?php echo e(route('public.courses')); ?>" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg hover:shadow-indigo-500/25">Explore Courses</a>
+                    <a href="<?php echo e(route('public.contact')); ?>" class="px-8 py-3.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm font-bold rounded-xl border border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all shadow-sm">Get in Touch</a>
                 </div>
             </div>
         </div>

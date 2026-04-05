@@ -77,7 +77,7 @@
         <div class="flex flex-col lg:flex-row gap-8">
             
             <!-- Left Sidebar (Desktop Only) -->
-            <aside class="hidden lg:block w-64 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pb-10 border-r border-gray-100 dark:border-gray-800 pr-4 custom-scrollbar">
+            <aside class="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto pb-10 border-r border-gray-100 dark:border-gray-800 pr-4 custom-scrollbar">
                 <?php echo $__env->make('public.partials.tutorial_nav', ['navItems' => $allTutorials], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </aside>
 
@@ -164,7 +164,7 @@
             </main>
 
             <!-- Right Sidebar (TOC) -->
-            <aside class="hidden xl:block w-48 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto mt-10 py-10 pl-6 border-l border-gray-50 dark:border-gray-800">
+            <aside class="hidden xl:block w-48 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto mt-10 py-10 pl-6 border-l border-gray-50 dark:border-gray-800">
                 <nav class="space-y-4">
                     <h5 class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">On this page</h5>
                     <ul class="space-y-2 text-xs font-medium">

@@ -39,14 +39,13 @@
 
                 <?php if($hasChildren): ?>
                     <div x-show="openSection === <?php echo e($item->id); ?>" 
-                         x-transition:enter="transition ease-out duration-100"
-                         x-transition:enter-start="opacity-0 -translate-y-2"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         class="mt-1 space-y-1 pl-4 border-l-2 border-gray-100 dark:border-gray-800 ml-3">
+                         x-collapse
+                         x-cloak
+                         class="mt-1 space-y-1 pl-4 border-l-2 border-gray-100 dark:border-gray-800 ml-3 transition-all duration-300">
                         <?php $__currentLoopData = $item->children; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <a href="<?php echo e(route('public.tutorial', [$category->slug, $child->slug])); ?>" 
                                @click="mobileMenuOpen = false"
-                               class="group flex items-center px-2.5 py-1.5 text-[13px] font-medium rounded-lg transition-all duration-200 
+                               class="group flex items-center px-2.5 py-1.5 text-[13px] font-medium rounded-lg transition-all duration-300 
                                <?php echo e((isset($tutorial) && $tutorial->id === $child->id) 
                                   ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10' 
                                   : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'); ?>">
