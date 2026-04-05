@@ -28,6 +28,8 @@ yarn-error.log
 .DS_Store
 Thumbs.db
 
+
+
 # Keep folder structure
 !/storage/app/public/.gitignore
 !/storage/framework/cache/data/.gitignore
