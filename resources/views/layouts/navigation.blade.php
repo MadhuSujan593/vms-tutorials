@@ -24,9 +24,11 @@
                     <x-nav-link :href="route('admin.courses.index')" :active="request()->routeIs('admin.courses.*')">
                         {{ __('Courses') }}
                     </x-nav-link>
+                    @can('manage-users')
                     <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                         {{ __('Users') }}
                     </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -91,9 +93,11 @@
             <x-responsive-nav-link :href="route('admin.courses.index')" :active="request()->routeIs('admin.courses.*')">
                 {{ __('Courses') }}
             </x-responsive-nav-link>
+            @can('manage-users')
             <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                 {{ __('Users') }}
             </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

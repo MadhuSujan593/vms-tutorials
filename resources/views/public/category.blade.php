@@ -1,10 +1,4 @@
 <x-public-layout>
-    @push('meta')
-        <meta name="description" content="{{ $metaDescription }}">
-        <meta property="og:title" content="{{ $title }}">
-        <meta property="og:description" content="{{ $metaDescription }}">
-        <meta name="twitter:card" content="summary">
-    @endpush
 
     @push('mobile_sidebar')
         @include('public.partials.tutorial_nav', ['navItems' => $tutorials])

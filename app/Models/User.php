@@ -41,5 +41,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'boolean',
     ];
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+
+    /**
+     * Check if the user is the super admin.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->email === 'contactvmsclass@gmail.com';
+    }
 }

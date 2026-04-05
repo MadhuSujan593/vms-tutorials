@@ -1,12 +1,6 @@
 <x-public-layout>
     <x-slot name="title">{{ $tutorial->title }} - {{ $category->name }} | VMS Tutorials</x-slot>
 
-    @push('meta')
-        <meta name="description" content="{{ $metaDescription }}">
-        <meta property="og:title" content="{{ $title }}">
-        <meta property="og:description" content="{{ $metaDescription }}">
-        <meta name="twitter:card" content="summary_large_image">
-    @endpush
 
     @push('mobile_sidebar')
         @include('public.partials.tutorial_nav', ['navItems' => $allTutorials])

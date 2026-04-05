@@ -59,7 +59,7 @@ Route::get('/sitemap.xml', function () {
 
 use App\Http\Controllers\Admin\AdminController;
 
-Route::get('/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TutorialController;
@@ -73,13 +73,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::put('categories/{category}/tutorials/reorder', [TutorialController::class, 'reorder'])->name('categories.tutorials.reorder');
     Route::resource('categories.tutorials', TutorialController::class);
     Route::resource('banners', BannerController::class);
     Route::resource('courses', CourseController::class);
-    Route::resource('users', UserController::class);
+    
+    // Only Super Admin can manage users
+    Route::resource('users', UserController::class)->middleware('can:manage-users');
 });
 
 require __DIR__.'/auth.php';

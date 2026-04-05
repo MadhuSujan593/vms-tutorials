@@ -93,6 +93,18 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Admin Role Toggle -->
+                            <div class="pt-6 border-t border-gray-50 dark:border-gray-700">
+                                <label class="inline-flex items-center cursor-pointer group">
+                                    <div class="relative">
+                                        <input type="checkbox" name="is_admin" value="1" class="sr-only peer" {{ old('is_admin', $user->is_admin) ? 'checked' : '' }}>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                                    </div>
+                                    <span class="ms-3 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors">Grant Admin Access</span>
+                                </label>
+                                <p class="text-[9px] text-gray-400 mt-2 px-1">Check this to allow this user to access the Admin Dashboard and manage tutorials.</p>
+                            </div>
                         </div>
 
                         <div class="mt-10 pt-6 border-t border-gray-50 dark:border-gray-700 flex items-center justify-end gap-4">

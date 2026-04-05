@@ -24,8 +24,25 @@
         <meta name="theme-color" content="#4f46e5">
         <title>{{ $title ?? config('app.name', 'VMS Tutorials') }}</title>
         
+        <meta name="description" content="{{ $metaDescription ?? 'Master modern technology with step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance with industry-standard guides.' }}">
+        <meta name="keywords" content="coding tutorials, programming guides, learn PHP, Java mastered, JavaScript tutorials, Laravel developer, web development training, VMS Tutorials, consultant projects">
+        
         <link rel="canonical" href="{{ url()->current() }}">
         
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="{{ $title ?? 'VMS Tutorials - Master Modern Technology' }}">
+        <meta property="og:description" content="{{ $metaDescription ?? 'Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance.' }}">
+        <meta property="og:image" content="{{ asset('img/logo.png') }}">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta property="twitter:title" content="{{ $title ?? 'VMS Tutorials - Master Modern Technology' }}">
+        <meta property="twitter:description" content="{{ $metaDescription ?? 'Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more.' }}">
+        <meta property="twitter:image" content="{{ asset('img/logo.png') }}">
+
         @stack('meta')
 
         <!-- Structured Data (JSON-LD) - Organization -->
@@ -34,9 +51,16 @@
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "VMS Tutorials",
+            "alternatename": "VMS Consultix",
             "url": "{{ url('/') }}",
             "logo": "{{ asset('img/logo.png') }}",
-            "description": "Professional coding tutorials for master developers."
+            "description": "Professional coding tutorials and technology consultant projects.",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-9000621876",
+                "contactType": "Customer Support",
+                "email": "contact@vmsclass.com"
+            }
         }
         </script>
         @stack('schema')

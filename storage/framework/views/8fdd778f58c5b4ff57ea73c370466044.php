@@ -9,6 +9,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+        <meta name="google-site-verification" content="xy01iEd-OOBG7hS6v4oZpuyBrwoH53D7gXqr4tPeZDk" />
 
         <!-- Prevent Flash of Light Mode -->
         <script>
@@ -23,8 +24,25 @@
         <meta name="theme-color" content="#4f46e5">
         <title><?php echo e($title ?? config('app.name', 'VMS Tutorials')); ?></title>
         
+        <meta name="description" content="<?php echo e($metaDescription ?? 'Master modern technology with step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance with industry-standard guides.'); ?>">
+        <meta name="keywords" content="coding tutorials, programming guides, learn PHP, Java mastered, JavaScript tutorials, Laravel developer, web development training, VMS Tutorials, consultant projects">
+        
         <link rel="canonical" href="<?php echo e(url()->current()); ?>">
         
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="<?php echo e(url()->current()); ?>">
+        <meta property="og:title" content="<?php echo e($title ?? 'VMS Tutorials - Master Modern Technology'); ?>">
+        <meta property="og:description" content="<?php echo e($metaDescription ?? 'Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance.'); ?>">
+        <meta property="og:image" content="<?php echo e(asset('img/logo.png')); ?>">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="<?php echo e(url()->current()); ?>">
+        <meta property="twitter:title" content="<?php echo e($title ?? 'VMS Tutorials - Master Modern Technology'); ?>">
+        <meta property="twitter:description" content="<?php echo e($metaDescription ?? 'Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more.'); ?>">
+        <meta property="twitter:image" content="<?php echo e(asset('img/logo.png')); ?>">
+
         <?php echo $__env->yieldPushContent('meta'); ?>
 
         <!-- Structured Data (JSON-LD) - Organization -->
@@ -33,9 +51,16 @@
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "VMS Tutorials",
+            "alternatename": "VMS Consultix",
             "url": "<?php echo e(url('/')); ?>",
             "logo": "<?php echo e(asset('img/logo.png')); ?>",
-            "description": "Professional coding tutorials for master developers."
+            "description": "Professional coding tutorials and technology consultant projects.",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-9000621876",
+                "contactType": "Customer Support",
+                "email": "contact@vmsclass.com"
+            }
         }
         </script>
         <?php echo $__env->yieldPushContent('schema'); ?>

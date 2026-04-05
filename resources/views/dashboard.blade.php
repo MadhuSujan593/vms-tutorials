@@ -62,6 +62,7 @@
                     </div>
                 </div>
 
+                @can('manage-users')
                 <!-- Users Stat Card -->
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 group hover:border-indigo-500 transition-all duration-300">
                     <div class="flex items-center justify-between">
@@ -74,6 +75,7 @@
                         </div>
                     </div>
                 </div>
+                @endcan
             </div>
 
             <!-- Management Section -->
@@ -118,6 +120,7 @@
                         <span class="text-xs font-black text-gray-900 dark:text-white uppercase italic tracking-tight">Public Site</span>
                     </a>
 
+                    @can('manage-users')
                     <!-- New User -->
                     <a href="{{ route('admin.users.create') }}" class="group p-6 bg-white dark:bg-gray-900/20 rounded-2xl border border-gray-50 dark:border-gray-800 hover:border-indigo-500 hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 flex flex-col items-center text-center gap-4">
                         <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm">
@@ -125,6 +128,7 @@
                         </div>
                         <span class="text-xs font-black text-gray-900 dark:text-white uppercase italic tracking-tight">New User</span>
                     </a>
+                    @endcan
                 </div>
             </div>
         </div>
