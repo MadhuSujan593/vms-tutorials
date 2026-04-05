@@ -144,6 +144,65 @@
             </div>
         </nav>
         
+        <!-- Category Sticky Sub-Nav (W3Schools Style) -->
+        <div class="sticky top-16 z-40 bg-gray-900 border-b border-gray-800 shadow-lg overflow-hidden transition-all duration-300" 
+             x-data="{ 
+                canScrollLeft: false, 
+                canScrollRight: false,
+                checkScroll() {
+                    const el = this.$refs.scrollContainer;
+                    if (!el) return;
+                    this.canScrollLeft = el.scrollLeft > 5;
+                    this.canScrollRight = el.scrollLeft < (el.scrollWidth - el.clientWidth - 5);
+                },
+                scroll(amount) {
+                    this.$refs.scrollContainer.scrollBy({ left: amount, behavior: 'smooth' });
+                }
+             }"
+             x-init="setTimeout(() => checkScroll(), 200); window.addEventListener('resize', () => checkScroll())">
+            <div class="max-w-7xl mx-auto relative group">
+                <!-- Left Scroll Button -->
+                <button @click="scroll(-300)" 
+                        x-show="canScrollLeft"
+                        x-cloak
+                        class="absolute left-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-r from-gray-900 to-transparent text-white flex items-center justify-start pl-2 hover:text-indigo-400 transition-colors">
+                    <svg class="w-6 h-6 shadow-2xl" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+
+                <!-- Scroll Container -->
+                <div x-ref="scrollContainer" 
+                     @scroll.debounce.50ms="checkScroll()"
+                     class="flex items-center gap-0 overflow-x-auto no-scrollbar scroll-smooth">
+                    
+                    <a href="<?php echo e(route('home')); ?>" 
+                       class="flex-shrink-0 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] border-b-2 transition-all <?php echo e(request()->routeIs('home') ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-400 border-transparent hover:text-white hover:bg-gray-800'); ?>">
+                       Home
+                    </a>
+
+                    <?php $__currentLoopData = $allCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('public.category', $cat->slug)); ?>" 
+                           class="flex-shrink-0 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] border-b-2 transition-all <?php echo e(request()->is('tutorials/' . $cat->slug . '*') ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-400 border-transparent hover:text-white hover:bg-gray-800'); ?>">
+                           <?php echo e($cat->name); ?>
+
+                        </a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+
+                <!-- Right Scroll Button -->
+                <button @click="scroll(300)" 
+                        x-show="canScrollRight"
+                        x-cloak
+                        class="absolute right-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-l from-gray-900 to-transparent text-white flex items-center justify-end pr-2 hover:text-indigo-400 transition-colors">
+                    <svg class="w-6 h-6 shadow-2xl" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
+                </button>
+            </div>
+        </div>
+
+        <style>
+            .no-scrollbar::-webkit-scrollbar { display: none; }
+            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        </style>
+        
         <!-- Mobile Sidebar Drawer -->
         <div x-show="mobileMenuOpen" 
              x-cloak

@@ -54,11 +54,8 @@ class PublicController extends Controller
             abort(404);
         }
 
-        // If this is a parent and has children, redirect to the first child for consistency
-        if ($tutorial->parent_id === null && $tutorial->children()->where('is_published', true)->exists()) {
-            $firstChild = $tutorial->children()->where('is_published', true)->orderBy('sort_order')->first();
-            return redirect()->route('public.tutorial', [$category->slug, $firstChild->slug]);
-        }
+        // If this is a parent and has children, we used to redirect to first child,
+        // but now we allow viewing the parent's content directly.
 
         $allTutorials = $category->tutorials()
                                  ->where('is_published', true)

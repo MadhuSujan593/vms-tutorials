@@ -9,28 +9,32 @@
                     $hasChildren = $item->children->count() > 0;
                     $currentId = $tutorial->id ?? 0;
                     $currentParentId = $tutorial->parent_id ?? 0;
-                    $isActiveParent = ($currentId === $item->id || $currentParentId === $item->id);
-                    $linkTarget = $hasChildren ? $item->children->first() : $item;
+                    $isDirectlyActive = ($currentId === $item->id);
+                    $isActiveParent = ($currentParentId === $item->id);
                 ?>
 
-                <div class="flex items-center group">
-                    <a href="<?php echo e(route('public.tutorial', [$category->slug, $linkTarget->slug])); ?>" 
+                <div class="flex items-center group gap-1">
+                    <a href="<?php echo e(route('public.tutorial', [$category->slug, $item->slug])); ?>" 
                        @click="openSection = <?php echo e($item->id); ?>; mobileMenuOpen = false"
-                       class="flex-1 group flex items-center justify-between px-2.5 py-1.5 text-[13px] font-bold rounded-lg transition-all duration-200 
-                       <?php echo e($isActiveParent
-                          ? 'bg-indigo-600/10 text-indigo-600 dark:text-indigo-400' 
-                          : 'text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'); ?>">
+                       class="flex-1 flex items-center justify-between px-2.5 py-1.5 text-[13px] font-bold rounded-lg transition-all duration-200 
+                       <?php echo e($isDirectlyActive
+                          ? 'bg-indigo-600 text-white shadow-md' 
+                          : ($isActiveParent 
+                             ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400'
+                             : 'text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white')); ?>">
                         <span class="truncate"><?php echo e($item->title); ?></span>
-                        
-                        <?php if($hasChildren): ?>
-                            <svg @click.prevent.stop="openSection = (openSection === <?php echo e($item->id); ?> ? null : <?php echo e($item->id); ?>)" 
-                                 class="w-4 h-4 transition-transform duration-200" 
+                    </a>
+                    
+                    <?php if($hasChildren): ?>
+                        <button @click.prevent.stop="openSection = (openSection === <?php echo e($item->id); ?> ? null : <?php echo e($item->id); ?>)" 
+                                class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                            <svg class="w-4 h-4 transition-transform duration-200" 
                                  :class="openSection === <?php echo e($item->id); ?> ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
                             </svg>
-                        <?php endif; ?>
-                    </a>
+                        </button>
+                    <?php endif; ?>
                 </div>
 
                 <?php if($hasChildren): ?>
