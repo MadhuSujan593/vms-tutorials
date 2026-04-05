@@ -34,6 +34,12 @@ Route::get('/sitemap.xml', function () {
     // Add Home
     $sitemap->add(Url::create(route('home'))->setPriority(1.0)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY));
     
+    // Add Static Pages
+    $sitemap->add(Url::create(route('public.about'))->setPriority(0.7)->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+    $sitemap->add(Url::create(route('public.contact'))->setPriority(0.5)->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY));
+    $sitemap->add(Url::create(route('public.donate'))->setPriority(0.4)->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY));
+    $sitemap->add(Url::create(route('public.courses'))->setPriority(0.9)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+    
     // Add Categories
     Category::all()->each(function (Category $category) use ($sitemap) {
         $sitemap->add(Url::create(route('public.category', $category))
@@ -42,11 +48,6 @@ Route::get('/sitemap.xml', function () {
             
         // Add Tutorials inside this category
         $category->tutorials()->where('is_published', true)->get()->each(function (Tutorial $tutorial) use ($sitemap, $category) {
-            // Skip top-level parents that redirect to first child (they don't have their own accessible content)
-            if ($tutorial->parent_id === null && $tutorial->children()->where('is_published', true)->exists()) {
-                return;
-            }
-            
             $sitemap->add(Url::create(route('public.tutorial', [$category->slug, $tutorial->slug]))
                 ->setPriority(0.6)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
