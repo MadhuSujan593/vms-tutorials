@@ -120,9 +120,15 @@
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
             }
+            /* Smooth theme transition only after initial load */
+            .theme-ready {
+                transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
         </style>
     </head>
-    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-none theme-ready">
         
         <!-- Sticky Header -->
         <nav class="sticky top-0 z-50 glass border-b border-gray-200 dark:border-gray-800">
@@ -144,7 +150,7 @@
 
                         <div class="hidden sm:flex items-center gap-6 mr-6">
                             @foreach($allCategories->where('is_blog', true) as $blogCat)
-                                <a href="{{ route('public.category', $blogCat->slug) }}" class="text-sm font-medium transition-all duration-300 {{ request()->is('tutorials/' . $blogCat->slug . '*') ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600' : 'text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400' }}">
+                                <a href="{{ route('public.category', $blogCat->slug) }}" class="text-sm font-medium transition-all duration-300 {{ (request()->is('tutorials/' . $blogCat->slug) || request()->is('tutorials/' . $blogCat->slug . '/*')) ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600' : 'text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400' }}">
                                     {{ $blogCat->name }}
                                 </a>
                             @endforeach
@@ -208,7 +214,7 @@
 
                     @foreach($allCategories->where('is_blog', false) as $cat)
                         <a href="{{ route('public.category', $cat->slug) }}" 
-                           class="flex-shrink-0 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] border-b-2 transition-all {{ request()->is('tutorials/' . $cat->slug . '*') ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-400 border-transparent hover:text-white hover:bg-gray-800' }}">
+                           class="flex-shrink-0 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] border-b-2 transition-all {{ (request()->is('tutorials/' . $cat->slug) || request()->is('tutorials/' . $cat->slug . '/*')) ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-400 border-transparent hover:text-white hover:bg-gray-800' }}">
                            {{ $cat->name }}
                         </a>
                     @endforeach
