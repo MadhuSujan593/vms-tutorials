@@ -8,12 +8,6 @@
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    <?php $__env->startPush('meta'); ?>
-        <meta name="description" content="<?php echo e($metaDescription); ?>">
-        <meta property="og:title" content="<?php echo e($title); ?>">
-        <meta property="og:description" content="<?php echo e($metaDescription); ?>">
-        <meta name="twitter:card" content="summary">
-    <?php $__env->stopPush(); ?>
 
     <?php $__env->startPush('mobile_sidebar'); ?>
         <?php echo $__env->make('public.partials.tutorial_nav', ['navItems' => $tutorials], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

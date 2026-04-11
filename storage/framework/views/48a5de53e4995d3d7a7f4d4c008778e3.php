@@ -10,12 +10,6 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('title', null, []); ?> <?php echo e($tutorial->title); ?> - <?php echo e($category->name); ?> | VMS Tutorials <?php $__env->endSlot(); ?>
 
-    <?php $__env->startPush('meta'); ?>
-        <meta name="description" content="<?php echo e($metaDescription); ?>">
-        <meta property="og:title" content="<?php echo e($title); ?>">
-        <meta property="og:description" content="<?php echo e($metaDescription); ?>">
-        <meta name="twitter:card" content="summary_large_image">
-    <?php $__env->stopPush(); ?>
 
     <?php $__env->startPush('mobile_sidebar'); ?>
         <?php echo $__env->make('public.partials.tutorial_nav', ['navItems' => $allTutorials], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
