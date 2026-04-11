@@ -13,7 +13,11 @@
         x-init="autoScroll()"
         class="my-8 group/slider overflow-hidden"
     >
-        <div class="relative overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 min-h-[100px] w-full {{ $aspect ?? 'aspect-[21/9] sm:aspect-[4/1] md:aspect-[5/1] lg:aspect-[6/1]' }}">
+        <div class="relative overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 min-h-[100px] w-full"
+             style="{{ isset($aspect) ? 'aspect-ratio: ' . str_replace('aspect-', '', str_replace('[', '', str_replace(']', '', $aspect))) . ';' : '' }}">
+            @if(!isset($aspect))
+                <div class="absolute inset-0 aspect-[21/9] sm:aspect-[4/1] md:aspect-[5/1] lg:aspect-[6/1]"></div>
+            @endif
             @foreach($banners as $index => $banner)
                 <a x-show="activeBanner === {{ $index }}"
                    x-transition:enter="transition ease-out duration-1000"

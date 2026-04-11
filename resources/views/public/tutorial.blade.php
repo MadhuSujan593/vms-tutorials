@@ -148,10 +148,17 @@
                         </div>
                     </div>
                 @endif
+
+                <!-- Mobile Banner -->
+                <div class="mt-12 xl:hidden flex justify-center">
+                    <div class="w-full max-w-xs">
+                        @include('public.partials.banner', ['banners' => $banners, 'aspect' => '2/3'])
+                    </div>
+                </div>
             </main>
 
             <!-- Right Sidebar (TOC) -->
-            <aside class="hidden xl:block w-72 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto mt-10 py-10 pl-6 border-l border-gray-50 dark:border-gray-800">
+            <aside class="hidden xl:block w-72 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto mt-10 py-10 pl-6 border-l border-gray-50 dark:border-gray-800 custom-scrollbar">
                 <nav class="space-y-4">
                     <h5 class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">On this page</h5>
                     <ul class="space-y-2 text-xs font-medium">
@@ -171,8 +178,8 @@
                     </ul>
                 </nav>
 
-                <div class="mt-12">
-                    @include('public.partials.banner', ['banners' => $banners, 'aspect' => 'aspect-video'])
+                <div class="mt-12 px-4">
+                    @include('public.partials.banner', ['banners' => $banners, 'aspect' => '2/3'])
                 </div>
             </aside>
 
