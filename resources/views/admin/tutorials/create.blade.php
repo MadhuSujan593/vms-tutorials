@@ -103,6 +103,7 @@
     
     <script src="{{ asset('vendor/easymde.min.js') }}"></script>
     <script src="{{ asset('vendor/turndown.js') }}"></script>
+    <script src="https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js"></script>
     <script>
         (function() {
             function startEditor() {
@@ -152,6 +153,12 @@
 
                     // Keep it clean: Remove style tags and script tags from pasted content
                     turndownService.remove(['style', 'script', 'head', 'meta']);
+                    
+                    if (typeof turndownPluginGfm !== 'undefined') {
+                        turndownService.use(turndownPluginGfm.tables);
+                    } else {
+                        turndownService.keep(['table', 'thead', 'tbody', 'tr', 'th', 'td']);
+                    }
 
                     easyMDE.codemirror.on("paste", function(instance, event) {
                         const html = event.clipboardData.getData("text/html");

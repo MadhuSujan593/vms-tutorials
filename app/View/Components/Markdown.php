@@ -14,7 +14,7 @@ class Markdown extends Component
     public function __construct(string $content)
     {
         $converter = new \League\CommonMark\GithubFlavoredMarkdownConverter([
-            'html_input' => 'strip',
+            'html_input' => 'allow',
             'allow_unsafe_links' => false,
         ]);
 
@@ -44,7 +44,7 @@ class Markdown extends Component
     public static function getExcerpt(string $content, int $limit = 160): string
     {
         $converter = new \League\CommonMark\GithubFlavoredMarkdownConverter([
-            'html_input' => 'strip',
+            'html_input' => 'allow',
             'allow_unsafe_links' => false,
         ]);
         

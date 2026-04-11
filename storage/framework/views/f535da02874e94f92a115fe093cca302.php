@@ -1,7 +1,6 @@
 <style>
     .vms-markdown table {
         display: table;
-        table-layout: fixed;
         width: 100%;
         margin-bottom: 2rem;
         border-collapse: separate;

@@ -103,11 +103,8 @@
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
                 transition: all 0.2s;
-                opacity: 0.4;
-                z-index: 10;
-            }
-            pre:hover .copy-btn {
                 opacity: 1;
+                z-index: 10;
             }
             .copy-btn:hover {
                 background: rgba(255, 255, 255, 0.2);
@@ -309,8 +306,14 @@
             // Initialize Copy Buttons
             function initCodeBlocks() {
                 document.querySelectorAll('pre:not(.has-copy-button)').forEach((pre) => {
-                    // Make pre relative for absolute positioning of the button
-                    pre.classList.add('relative', 'has-copy-button');
+                    pre.classList.add('has-copy-button');
+                    
+                    // Create a wrapper so the button stays fixed to the visible container 
+                    // and doesn't scroll away with the code.
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'relative';
+                    pre.parentNode.insertBefore(wrapper, pre);
+                    wrapper.appendChild(pre);
                     
                     // Force a default language if none exists for better highlighting
                     const code = pre.querySelector('code');
@@ -322,7 +325,7 @@
                     button.className = 'copy-btn';
                     button.innerText = 'Copy';
                     button.setAttribute('aria-label', 'Copy code to clipboard');
-                    pre.appendChild(button);
+                    wrapper.appendChild(button);
 
                     button.addEventListener('click', () => {
                         const codeText = code ? code.innerText : pre.innerText;
