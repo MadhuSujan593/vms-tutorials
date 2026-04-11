@@ -2,9 +2,11 @@
     <x-slot name="title">{{ $tutorial->title }} - {{ $category->name }} | VMS Tutorials</x-slot>
 
 
-    @push('mobile_sidebar')
-        @include('public.partials.tutorial_nav', ['navItems' => $allTutorials])
-    @endpush
+    @if(!$category->is_blog)
+        @push('mobile_sidebar')
+            @include('public.partials.tutorial_nav', ['navItems' => $allTutorials])
+        @endpush
+    @endif
 
     <!-- Page Specific Structured Data -->
     @push('schema')
@@ -61,10 +63,12 @@
     <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- Left Sidebar (Desktop Only) -->
-            <aside class="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto pb-10 border-r border-gray-100 dark:border-gray-800 pr-4 custom-scrollbar">
-                @include('public.partials.tutorial_nav', ['navItems' => $allTutorials])
-            </aside>
+            @if(!$category->is_blog)
+                <!-- Left Sidebar (Desktop Only) -->
+                <aside class="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto pb-10 border-r border-gray-100 dark:border-gray-800 pr-4 custom-scrollbar">
+                    @include('public.partials.tutorial_nav', ['navItems' => $allTutorials])
+                </aside>
+            @endif
 
             <!-- Main Content Area -->
             <main class="flex-1 min-w-0 py-6 lg:py-10">
@@ -108,8 +112,6 @@
                                 {{ $prev->title }}
                             </span>
                         </a>
-                    @else
-                        <div class="flex-1"></div>
                     @endif
 
                     @if($next)
@@ -120,14 +122,36 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </span>
                         </a>
-                    @else
-                        <div class="flex-1"></div>
                     @endif
                 </div>
+
+                <!-- Related Categories -->
+                @if($category->relatedCategories->count() > 0)
+                    <div class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Related Topics You Might Like</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach($category->relatedCategories as $related)
+                                <a href="{{ route('public.category', $related->slug) }}" class="group block p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-indigo-500 hover:shadow-md transition-all">
+                                    <div class="flex items-center gap-3">
+                                        @if($related->icon)
+                                            <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center p-2 flex-shrink-0 shadow-sm border border-indigo-100 dark:border-indigo-800/50">
+                                                <img src="{{ asset('storage/' . $related->icon) }}" class="w-full h-full object-contain filter drop-shadow-sm" alt="{{ $related->name }}">
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <h4 class="text-base font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors">{{ $related->name }}</h4>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-1">{{ $related->description ?? 'Explore related tutorials.' }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </main>
 
             <!-- Right Sidebar (TOC) -->
-            <aside class="hidden xl:block w-48 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto mt-10 py-10 pl-6 border-l border-gray-50 dark:border-gray-800">
+            <aside class="hidden xl:block w-72 flex-shrink-0 sticky top-32 h-[calc(100vh-8rem)] overflow-y-auto mt-10 py-10 pl-6 border-l border-gray-50 dark:border-gray-800">
                 <nav class="space-y-4">
                     <h5 class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">On this page</h5>
                     <ul class="space-y-2 text-xs font-medium">
@@ -148,7 +172,7 @@
                 </nav>
 
                 <div class="mt-12">
-                    @include('public.partials.banner', ['banners' => $banners])
+                    @include('public.partials.banner', ['banners' => $banners, 'aspect' => 'aspect-video'])
                 </div>
             </aside>
 

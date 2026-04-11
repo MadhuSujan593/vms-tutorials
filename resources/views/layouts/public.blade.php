@@ -143,6 +143,11 @@
                     </div>
 
                         <div class="hidden sm:flex items-center gap-6 mr-6">
+                            @foreach($allCategories->where('is_blog', true) as $blogCat)
+                                <a href="{{ route('public.category', $blogCat->slug) }}" class="text-sm font-medium transition-all duration-300 {{ request()->is('tutorials/' . $blogCat->slug . '*') ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600' : 'text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400' }}">
+                                    {{ $blogCat->name }}
+                                </a>
+                            @endforeach
                             <a href="{{ route('public.courses') }}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300">Courses</a>
                             <a href="{{ route('public.about') }}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About Us</a>
                             <a href="{{ route('public.contact') }}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact Us</a>
@@ -201,7 +206,7 @@
                        Home
                     </a>
 
-                    @foreach($allCategories as $cat)
+                    @foreach($allCategories->where('is_blog', false) as $cat)
                         <a href="{{ route('public.category', $cat->slug) }}" 
                            class="flex-shrink-0 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] border-b-2 transition-all {{ request()->is('tutorials/' . $cat->slug . '*') ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-400 border-transparent hover:text-white hover:bg-gray-800' }}">
                            {{ $cat->name }}
@@ -264,6 +269,9 @@
                             </button>
                         </div>
                         <nav class="mt-5 px-4 space-y-1">
+                                @foreach($allCategories->where('is_blog', true) as $blogCat)
+                                    <a href="{{ route('public.category', $blogCat->slug) }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">{{ $blogCat->name }}</a>
+                                @endforeach
                                 <a href="{{ route('public.courses') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Courses</a>
                                 <a href="{{ route('public.about') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">About Us</a>
                                 <a href="{{ route('public.contact') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Contact Us</a>

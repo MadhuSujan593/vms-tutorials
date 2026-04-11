@@ -44,6 +44,38 @@
                             @enderror
                         </div>
 
+                        <!-- Blog Post Category Toggle -->
+                        <div class="mb-6 flex items-center">
+                            <input type="checkbox" name="is_blog" id="is_blog" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ old('is_blog') ? 'checked' : '' }}>
+                            <label for="is_blog" class="ml-2 block text-sm font-medium text-gray-900">
+                                This is a Blog Category
+                                <p class="text-xs text-gray-500 font-normal">If checked, it will bypass structured sidebars and show on the top Navbar instead.</p>
+                            </label>
+                        </div>
+
+                        <!-- Related Categories -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Related Categories (Many-to-Many Vise-Versa)</label>
+                            <div class="space-y-2 border border-gray-300 rounded-md p-4 max-h-48 overflow-y-auto bg-gray-50">
+                                @forelse($categoriesList as $cat)
+                                    <div class="flex items-start">
+                                        <div class="flex h-5 items-center">
+                                            <input type="checkbox" name="related_categories[]" id="related_{{ $cat->id }}" value="{{ $cat->id }}" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ (collect(old('related_categories'))->contains($cat->id)) ? 'checked' : '' }}>
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="related_{{ $cat->id }}" class="font-medium text-gray-700">{{ $cat->name }}</label>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <p class="text-sm text-gray-500">No other categories available.</p>
+                                @endforelse
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Linking here will also link the other category back to this one automatically.</p>
+                            @error('related_categories')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div class="flex items-center justify-end">
                             <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none">
                                 Save Category

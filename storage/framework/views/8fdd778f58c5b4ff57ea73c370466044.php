@@ -143,6 +143,12 @@
                     </div>
 
                         <div class="hidden sm:flex items-center gap-6 mr-6">
+                            <?php $__currentLoopData = $allCategories->where('is_blog', true); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $blogCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e(route('public.category', $blogCat->slug)); ?>" class="text-sm font-medium transition-all duration-300 <?php echo e(request()->is('tutorials/' . $blogCat->slug . '*') ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600' : 'text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400'); ?>">
+                                    <?php echo e($blogCat->name); ?>
+
+                                </a>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <a href="<?php echo e(route('public.courses')); ?>" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300">Courses</a>
                             <a href="<?php echo e(route('public.about')); ?>" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About Us</a>
                             <a href="<?php echo e(route('public.contact')); ?>" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact Us</a>
@@ -201,7 +207,7 @@
                        Home
                     </a>
 
-                    <?php $__currentLoopData = $allCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $allCategories->where('is_blog', false); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <a href="<?php echo e(route('public.category', $cat->slug)); ?>" 
                            class="flex-shrink-0 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] border-b-2 transition-all <?php echo e(request()->is('tutorials/' . $cat->slug . '*') ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-400 border-transparent hover:text-white hover:bg-gray-800'); ?>">
                            <?php echo e($cat->name); ?>
@@ -265,6 +271,9 @@
                             </button>
                         </div>
                         <nav class="mt-5 px-4 space-y-1">
+                                <?php $__currentLoopData = $allCategories->where('is_blog', true); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $blogCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <a href="<?php echo e(route('public.category', $blogCat->slug)); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"><?php echo e($blogCat->name); ?></a>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <a href="<?php echo e(route('public.courses')); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Courses</a>
                                 <a href="<?php echo e(route('public.about')); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">About Us</a>
                                 <a href="<?php echo e(route('public.contact')); ?>" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Contact Us</a>

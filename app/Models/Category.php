@@ -12,7 +12,11 @@ class Category extends Model
 {
     use HasFactory, HasSlug;
 
-    protected $fillable = ['name', 'slug', 'description', 'icon'];
+    protected $fillable = ['name', 'slug', 'description', 'icon', 'is_blog'];
+
+    protected $casts = [
+        'is_blog' => 'boolean',
+    ];
 
     public function getSlugOptions() : SlugOptions
     {
@@ -24,5 +28,10 @@ class Category extends Model
     public function tutorials()
     {
         return $this->hasMany(Tutorial::class)->orderBy('sort_order');
+    }
+
+    public function relatedCategories()
+    {
+        return $this->belongsToMany(Category::class, 'related_categories', 'category_id', 'related_id');
     }
 }

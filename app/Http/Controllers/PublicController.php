@@ -18,9 +18,12 @@ class PublicController extends Controller
 
     public function home()
     {
-        $categories = Category::withCount(['tutorials' => function($query) {
-            $query->where('is_published', true);
-        }])->orderBy('name')->get();
+        $categories = Category::where('is_blog', false)
+            ->withCount(['tutorials' => function($query) {
+                $query->where('is_published', true);
+            }])
+            ->orderBy('name')
+            ->get();
 
         $banners = $this->getActiveBanners();
         $courses = Course::where('is_active', true)->orderBy('sort_order')->orderBy('created_at', 'desc')->get();

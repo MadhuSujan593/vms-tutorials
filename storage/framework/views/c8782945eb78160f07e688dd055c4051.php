@@ -135,6 +135,7 @@ unset($__errorArgs, $__bag); ?>
     
     <script src="<?php echo e(asset('vendor/easymde.min.js')); ?>"></script>
     <script src="<?php echo e(asset('vendor/turndown.js')); ?>"></script>
+    <script src="https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js"></script>
     <script>
         (function() {
             function startEditor() {
@@ -160,7 +161,7 @@ unset($__errorArgs, $__bag); ?>
                     },
                     placeholder: "Paste your W3Schools content here...",
                     toolbar: [
-                        "bold", "italic", "heading", "|", 
+                        "bold", "italic", "|", "heading-1", "heading-2", "heading-3", "|", 
                         "quote", "unordered-list", "ordered-list", "|", 
                         "link", "image", "code", "table", "|", 
                         "preview", "side-by-side", "fullscreen", "|", 
@@ -184,6 +185,12 @@ unset($__errorArgs, $__bag); ?>
 
                     // Keep it clean: Remove style tags and script tags from pasted content
                     turndownService.remove(['style', 'script', 'head', 'meta']);
+                    
+                    if (typeof turndownPluginGfm !== 'undefined') {
+                        turndownService.use(turndownPluginGfm.tables);
+                    } else {
+                        turndownService.keep(['table', 'thead', 'tbody', 'tr', 'th', 'td']);
+                    }
 
                     easyMDE.codemirror.on("paste", function(instance, event) {
                         const html = event.clipboardData.getData("text/html");

@@ -18,7 +18,8 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return view('admin.categories.create');
+        $categoriesList = Category::orderBy('name')->get();
+        return view('admin.categories.create', compact('categoriesList'));
     }
 
     public function store(Request $request)
@@ -26,14 +27,20 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048'
+            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048',
+            'related_categories' => 'nullable|array',
+            'related_categories.*' => 'exists:categories,id',
         ]);
+        
+        $validated['is_blog'] = $request->boolean('is_blog');
         
         if ($request->hasFile('icon')) {
             $validated['icon'] = $request->file('icon')->store('categories', 'public');
         }
         
-        Category::create($validated);
+        $category = Category::create($validated);
+        $this->syncRelatedCategories($category, $request->get('related_categories', []));
+        
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
@@ -44,7 +51,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        $categoriesList = Category::where('id', '!=', $category->id)->orderBy('name')->get();
+        return view('admin.categories.edit', compact('category', 'categoriesList'));
     }
 
     public function update(Request $request, Category $category)
@@ -52,8 +60,12 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048'
+            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048',
+            'related_categories' => 'nullable|array',
+            'related_categories.*' => 'exists:categories,id',
         ]);
+
+        $validated['is_blog'] = $request->boolean('is_blog');
 
         if ($request->hasFile('icon')) {
             if ($category->icon) {
@@ -63,6 +75,8 @@ class CategoryController extends Controller
         }
 
         $category->update($validated);
+        $this->syncRelatedCategories($category, $request->get('related_categories', []));
+        
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
 
@@ -72,6 +86,24 @@ class CategoryController extends Controller
             Storage::disk('public')->delete($category->icon);
         }
         $category->delete();
+        \DB::table('related_categories')->where('related_id', $category->id)->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
+    }
+
+    private function syncRelatedCategories(Category $category, array $relatedIds)
+    {
+        $category->relatedCategories()->sync($relatedIds);
+        
+        \DB::table('related_categories')
+            ->where('related_id', $category->id)
+            ->whereNotIn('category_id', $relatedIds)
+            ->delete();
+            
+        foreach ($relatedIds as $id) {
+            \DB::table('related_categories')->updateOrInsert(
+                ['category_id' => $id, 'related_id' => $category->id],
+                ['created_at' => now(), 'updated_at' => now()]
+            );
+        }
     }
 }
