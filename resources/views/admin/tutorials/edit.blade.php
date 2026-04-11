@@ -139,7 +139,7 @@
                     },
                     toolbar: [
                         "bold", "italic", "|", "heading-1", "heading-2", "heading-3", "|", 
-                        "quote", "unordered-list", "ordered-list", "|", 
+                        "unordered-list", "ordered-list", "|", 
                         "link", "image", "code", "table", "|", 
                         "preview", "side-by-side", "fullscreen", "|", 
                         {
@@ -148,8 +148,53 @@
                             className: "fa fa-question-circle",
                             title: "Markdown Guide",
                         }
-                    ]
+                    ],
+                    uploadImage: true,
+                    imageUploadFunction: function(file, onSuccess, onError) {
+                        const formData = new FormData();
+                        formData.append('image', file);
+                        
+                        fetch("{{ route('admin.upload-image') }}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.url) { onSuccess(data.url); } 
+                            else { onError(data.error || "Upload failed"); }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            onError("Network error occurred");
+                        });
+                    }
                 });
+
+                // Override the toolbar button action to be ultra-reliable
+                // and fix the "inconsistent/works only once" issue.
+                const imageBtn = easyMDE.toolbar.find(item => item.name === 'image');
+                if (imageBtn) {
+                    imageBtn.action = function(editor) {
+                        const picker = document.createElement('input');
+                        picker.type = 'file'; 
+                        picker.accept = 'image/*';
+                        picker.onchange = function(e) {
+                            const file = e.target.files[0];
+                            if (!file) return;
+                            
+                            editor.options.imageUploadFunction(file, function(url) {
+                                const cm = editor.codemirror;
+                                cm.replaceSelection("![](" + url + ")");
+                            }, function(err) {
+                                alert("Upload Error: " + err);
+                            });
+                        };
+                        picker.click();
+                    };
+                }
 
                 const TurndownConstructor = typeof TurndownService !== 'undefined' ? TurndownService : (typeof Turndown !== 'undefined' ? Turndown : undefined);
 

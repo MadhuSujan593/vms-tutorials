@@ -80,6 +80,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::resource('banners', BannerController::class);
     Route::resource('courses', CourseController::class);
     
+    // Image Upload for Editor
+    Route::post('upload-image', [TutorialController::class, 'uploadImage'])->name('upload-image');
+    
     // Only Super Admin can manage users
     Route::resource('users', UserController::class)->middleware('can:manage-users');
 });
