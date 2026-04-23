@@ -27,7 +27,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048',
+            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:5120', // Max 5MB
             'related_categories' => 'nullable|array',
             'related_categories.*' => 'exists:categories,id',
         ]);
@@ -60,7 +60,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:2048',
+            'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:5120', // Max 5MB
             'related_categories' => 'nullable|array',
             'related_categories.*' => 'exists:categories,id',
         ]);

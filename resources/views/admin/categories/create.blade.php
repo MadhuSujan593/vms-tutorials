@@ -28,7 +28,7 @@
 
                         <!-- Icon -->
                         <div class="mb-4">
-                            <label for="icon" class="block text-sm font-medium text-gray-700">Category Icon (Logo)</label>
+                            <label for="icon" class="block text-sm font-medium text-gray-700">Category Icon (Logo) <span class="text-xs text-gray-500 font-normal">(Max 5MB)</span></label>
                             <input type="file" name="icon" id="icon" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                             @error('icon')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

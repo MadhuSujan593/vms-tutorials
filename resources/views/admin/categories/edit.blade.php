@@ -31,7 +31,7 @@
 
                         <!-- Icon -->
                         <div class="mb-4">
-                            <label for="icon" class="block text-sm font-medium text-gray-700">Category Icon (Logo)</label>
+                            <label for="icon" class="block text-sm font-medium text-gray-700">Category Icon (Logo) <span class="text-xs text-gray-500 font-normal">(Max 5MB)</span></label>
                             @if($category->icon)
                                 <div class="mt-2 mb-4 flex items-center space-x-4">
                                     <div class="w-16 h-16 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md overflow-hidden">
