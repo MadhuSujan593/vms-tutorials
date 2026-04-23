@@ -44,10 +44,6 @@
                             {{ $course->title }}
                         </h3>
                         
-                        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mb-4 flex-grow">
-                            Master modern web development with this comprehensive course. Build real-world projects and scale your expertise.
-                        </p>
-                        
                         <div class="pt-4 border-t border-gray-50 dark:border-gray-700/50 flex items-center justify-between">
                             <span class="text-[10px] font-semibold text-gray-400 uppercase">Self-Paced</span>
                             <span class="text-indigo-600 dark:text-indigo-400 text-xs font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
