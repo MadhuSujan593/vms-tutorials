@@ -10,34 +10,12 @@
         </div>
     </x-slot>
 
-    <link rel="stylesheet" href="{{ asset('vendor/easymde.min.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
     <style>
-        /* Professional Preview Styling */
-        .editor-preview, .editor-preview-side {
-            background: #ffffff !important;
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-            color: #1a202c !important;
-            line-height: 1.6 !important;
+        .tox-tinymce {
+            border-radius: 0.375rem !important;
+            border-color: #d1d5db !important;
         }
-        .editor-preview h1, .editor-preview-side h1 { font-size: 2.25rem !important; font-weight: 800 !important; margin-bottom: 1.5rem !important; border-bottom: 1px solid #e2e8f0 !important; padding-bottom: 0.5rem !important; }
-        .editor-preview h2, .editor-preview-side h2 { font-size: 1.875rem !important; font-weight: 700 !important; margin-top: 2rem !important; margin-bottom: 1rem !important; border-bottom: 1px solid #edf2f7 !important; padding-bottom: 0.3rem !important; }
-        .editor-preview h3, .editor-preview-side h3 { font-size: 1.5rem !important; font-weight: 600 !important; margin-top: 1.5rem !important; margin-bottom: 0.75rem !important; }
-        .editor-preview p, .editor-preview-side p { margin-bottom: 1.25rem !important; }
-        .editor-preview ul, .editor-preview-side ul { list-style-type: disc !important; margin-left: 1.5rem !important; margin-bottom: 1.25rem !important; }
-        .editor-preview li, .editor-preview-side li { margin-bottom: 0.5rem !important; }
-        .editor-preview strong, .editor-preview-side strong { font-weight: 700 !important; color: #111827 !important; }
-        
-        /* MAGIC: Make the symbols faint in the main editor */
-        .CodeMirror .cm-formatting-header, 
-        .CodeMirror .cm-formatting-strong, 
-        .CodeMirror .cm-formatting-em { 
-            opacity: 0.4 !important; 
-            font-weight: normal !important;
-        }
-        /* Make headings big in the EDITOR area */
-        .CodeMirror .cm-header-1 { font-size: 2rem !important; font-weight: bold !important; color: #111 !important; }
-        .CodeMirror .cm-header-2 { font-size: 1.5rem !important; font-weight: bold !important; color: #222 !important; }
-        .CodeMirror .cm-header-3 { font-size: 1.25rem !important; font-weight: bold !important; color: #333 !important; }
     </style>
 
     <div class="py-12">
@@ -75,10 +53,10 @@
                             </div>
                         </div>
 
-                        <!-- Markdown Content Editor -->
+                        <!-- HTML Content Editor -->
                         <div class="mb-6">
-                            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Tutorial Content (Markdown supported)</label>
-                            <textarea name="content" id="content-editor" rows="15" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-sm">{{ old('content') }}</textarea>
+                            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Tutorial Content</label>
+                            <textarea name="content" id="content-editor" rows="20" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 sm:text-sm">{{ old('content') }}</textarea>
                             @error('content')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -100,51 +78,25 @@
             </div>
         </div>
     </div>
-    
-    <script src="{{ asset('vendor/easymde.min.js') }}"></script>
-    <script src="{{ asset('vendor/turndown.js') }}"></script>
-    <script src="https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js"></script>
     <script>
-        (function() {
-            function startEditor() {
-                if (typeof EasyMDE === 'undefined') {
-                    console.warn("EasyMDE not found, retrying...");
-                    setTimeout(startEditor, 200);
-                    return;
-                }
-
-                console.log("Initializing EasyMDE...");
-                const easyMDE = new EasyMDE({
-                    element: document.getElementById('content-editor'),
-                    spellChecker: false,
-                    forceSync: true,
-                    autosave: {
-                        enabled: true,
-                        uniqueId: "create_tutorial",
-                        delay: 1000,
-                    },
-                    renderingConfig: {
-                        singleLineBreaks: false,
-                        codeSyntaxHighlighting: true,
-                    },
-                    placeholder: "Paste your W3Schools content here...",
-                    toolbar: [
-                        "bold", "italic", "|", "heading-1", "heading-2", "heading-3", "|", 
-                        "unordered-list", "ordered-list", "|", 
-                        "link", "image", "code", "table", "|", 
-                        "preview", "side-by-side", "fullscreen", "|", 
-                        {
-                            name: "guide",
-                            action: "https://www.markdownguide.org/basic-syntax/",
-                            className: "fa fa-question-circle",
-                            title: "Markdown Guide",
-                        }
-                    ],
-                    uploadImage: true,
-                    imageUploadFunction: function(file, onSuccess, onError) {
+        document.addEventListener('DOMContentLoaded', function() {
+            tinymce.init({
+                selector: '#content-editor',
+                plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+                menubar: 'file edit view insert format tools table help',
+                toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | image media link codesample | removeformat fullscreen preview',
+                toolbar_mode: 'wrap',
+                toolbar_sticky: true,
+                image_advtab: true,
+                promotion: false,
+                branding: false,
+                height: 700,
+                content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6; } ul, ol { padding-left: 1.5rem; } ul, ul ul, ul ul ul { list-style-type: disc !important; } ol, ol ol, ol ol ol { list-style-type: decimal !important; }',
+                images_upload_handler: function (blobInfo, progress) {
+                    return new Promise((resolve, reject) => {
                         const formData = new FormData();
-                        formData.append('image', file);
-                        
+                        formData.append('image', blobInfo.blob());
+
                         fetch("{{ route('admin.upload-image') }}", {
                             method: "POST",
                             headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
@@ -152,79 +104,18 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.url) { onSuccess(data.url); } 
-                            else { onError(data.error || "Upload failed"); }
+                            if (data.url) { 
+                                resolve(data.url); 
+                            } else { 
+                                reject(data.error || "Upload failed"); 
+                            }
                         })
                         .catch(err => {
-                            console.error(err);
-                            onError("Network error occurred");
+                            reject("Network error occurred");
                         });
-                    }
-                });
-
-                // Override the toolbar button action to be ultra-reliable
-                // and fix the "inconsistent/works only once" issue.
-                const imageBtn = easyMDE.toolbar.find(item => item.name === 'image');
-                if (imageBtn) {
-                    imageBtn.action = function(editor) {
-                        const picker = document.createElement('input');
-                        picker.type = 'file'; 
-                        picker.accept = 'image/*';
-                        picker.onchange = function(e) {
-                            const file = e.target.files[0];
-                            if (!file) return;
-                            
-                            editor.options.imageUploadFunction(file, function(url) {
-                                const cm = editor.codemirror;
-                                cm.replaceSelection("![](" + url + ")");
-                            }, function(err) {
-                                alert("Upload Error: " + err);
-                            });
-                        };
-                        picker.click();
-                    };
-                }
-
-                const TurndownConstructor = typeof TurndownService !== 'undefined' ? TurndownService : (typeof Turndown !== 'undefined' ? Turndown : undefined);
-
-                if (typeof TurndownConstructor !== 'undefined') {
-                    const turndownService = new TurndownConstructor({
-                        headingStyle: 'atx',
-                        codeBlockStyle: 'fenced',
-                        bullet: '-'
-                    });
-
-                    // Keep it clean: Remove style tags and script tags from pasted content
-                    turndownService.remove(['style', 'script', 'head', 'meta']);
-                    
-                    if (typeof turndownPluginGfm !== 'undefined') {
-                        turndownService.use(turndownPluginGfm.tables);
-                    } else {
-                        turndownService.keep(['table', 'thead', 'tbody', 'tr', 'th', 'td']);
-                    }
-
-                    easyMDE.codemirror.on("paste", function(instance, event) {
-                        const html = event.clipboardData.getData("text/html");
-                        if (html) {
-                            event.preventDefault();
-                            let markdown = turndownService.turndown(html);
-                            
-                            // Cleanup common W3Schools artifacts
-                            markdown = markdown.replace(/\n{3,}/g, '\n\n'); // Max 2 newlines
-                            
-                            instance.replaceSelection(markdown);
-                        }
                     });
                 }
-
-                // Ensure the editor stays "Normal Size" and not Full Screen
-            }
-
-            if (document.readyState === 'complete') {
-                startEditor();
-            } else {
-                window.addEventListener('load', startEditor);
-            }
-        })();
+            });
+        });
     </script>
 </x-app-layout>

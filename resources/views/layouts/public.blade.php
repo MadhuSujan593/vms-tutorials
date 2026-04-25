@@ -69,17 +69,34 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         
-        <!-- PrismJS for Code Highlighting -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-        
         <!-- Favicon (VMS Branding) -->
         <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-weight=%22bold%22 font-size=%2245%22 fill=%22white%22>VMS</text></svg>">
+
+        <!-- Alpine Plugins (Must load before Alpine) -->
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
+        <!-- PrismJS Theme (Loaded after main CSS to ensure override) -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+        
         <style>
             [x-cloak] { display: none !important; }
+            .vms-markdown code[class*="language-"], 
+            .vms-markdown pre[class*="language-"] {
+                text-shadow: none !important;
+            }
+            /* Precision overrides to force Prism colors through Tailwind Prose */
+            .vms-markdown .token.comment, .vms-markdown .token.prolog, .vms-markdown .token.doctype, .vms-markdown .token.cdata { color: #999 !important; }
+            .vms-markdown .token.namespace { opacity: .7 !important; }
+            .vms-markdown .token.property, .vms-markdown .token.tag, .vms-markdown .token.boolean, .vms-markdown .token.number, .vms-markdown .token.constant, .vms-markdown .token.symbol, .vms-markdown .token.deleted { color: #f92672 !important; }
+            .vms-markdown .token.selector, .vms-markdown .token.attr-name, .vms-markdown .token.string, .vms-markdown .token.char, .vms-markdown .token.builtin, .vms-markdown .token.inserted { color: #a6e22e !important; }
+            .vms-markdown .token.operator, .vms-markdown .token.entity, .vms-markdown .token.url, .language-css .token.string, .style .token.string { color: #f8f8f2 !important; }
+            .vms-markdown .token.atrule, .vms-markdown .token.attr-value, .vms-markdown .token.keyword { color: #66d9ef !important; }
+            .vms-markdown .token.function, .vms-markdown .token.class-name { color: #e6db74 !important; }
+            .vms-markdown .token.regex, .vms-markdown .token.important, .vms-markdown .token.variable { color: #fd971f !important; }
+
             .glass {
                 background: rgba(255, 255, 255, 0.7);
                 backdrop-filter: blur(10px);
@@ -312,60 +329,49 @@
 
         <!-- PrismJS Scripts (Best Practice: defer) -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" defer></script>
         
         <script>
-            // Initialize Copy Buttons
+            // Initialize Syntax Highlighting and Copy Buttons
             function initCodeBlocks() {
-                document.querySelectorAll('pre:not(.has-copy-button)').forEach((pre) => {
+                const preBlocks = document.querySelectorAll('pre:not(.has-copy-button)');
+                if (preBlocks.length === 0) return;
+                if (!window.Prism) return;
+
+                preBlocks.forEach((pre) => {
                     pre.classList.add('has-copy-button');
-                    
-                    // Create a wrapper so the button stays fixed to the visible container 
-                    // and doesn't scroll away with the code.
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'relative';
-                    pre.parentNode.insertBefore(wrapper, pre);
-                    wrapper.appendChild(pre);
-                    
-                    // Force a default language if none exists for better highlighting
                     const code = pre.querySelector('code');
-                    if (code && !code.className.match(/language-/)) {
-                        code.classList.add('language-javascript');
+                    const preLang = Array.from(pre.classList).find(c => c.startsWith('language-'));
+                    
+                    if (code && preLang) {
+                        code.classList.add(preLang);
                     }
 
+                    // Add Copy Button
                     const button = document.createElement('button');
                     button.className = 'copy-btn';
                     button.innerText = 'Copy';
-                    button.setAttribute('aria-label', 'Copy code to clipboard');
-                    wrapper.appendChild(button);
-
-                    button.addEventListener('click', () => {
-                        const codeText = code ? code.innerText : pre.innerText;
-                        navigator.clipboard.writeText(codeText).then(() => {
+                    button.onclick = () => {
+                        const text = code ? code.innerText : pre.innerText;
+                        navigator.clipboard.writeText(text).then(() => {
                             button.innerText = 'Copied!';
-                            button.classList.add('copied');
-                            
-                            setTimeout(() => {
-                                button.innerText = 'Copy';
-                                button.classList.remove('copied');
-                            }, 2000);
+                            setTimeout(() => button.innerText = 'Copy', 2000);
                         });
-                    });
+                    };
+                    
+                    pre.style.position = 'relative';
+                    pre.appendChild(button);
                 });
                 
-                // Re-run Prism if it's available
-                if (window.Prism) {
-                    Prism.highlightAll();
-                }
+                Prism.highlightAll();
             }
 
+            window.addEventListener('load', initCodeBlocks);
             document.addEventListener('DOMContentLoaded', initCodeBlocks);
-            // Also run it immediately in case DOM is already ready
-            if (document.readyState === 'interactive' || document.readyState === 'complete') {
-                initCodeBlocks();
-            }
         </script>
     </body>
 </html>

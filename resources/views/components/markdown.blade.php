@@ -52,6 +52,48 @@
     .vms-markdown table tbody tr:last-child td {
         border-bottom: none;
     }
+
+    /* Force Prism colors to ALWAYS win over Tailwind prose */
+    .vms-markdown pre[class*="language-"] {
+        color: #ccc !important; /* Default fallback text color for code */
+    }
+    .dark .vms-markdown pre[class*="language-"] {
+        color: #eee !important;
+    }
+    
+    /* Override Tailwind Prose list styling to perfectly match TinyMCE editor */
+    div.vms-markdown.prose ul, 
+    div.vms-markdown.prose ol {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    div.vms-markdown.prose ul:not([style]), 
+    div.vms-markdown.prose ol:not([style]) {
+        padding-left: 1.25rem; /* Set back to 20px baseline */
+    }
+    div.vms-markdown.prose li {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding-left: 0 !important; /* Keep the bullet-to-text gap standard to align under "P" */
+    }
+    div.vms-markdown.prose li > * {
+        /* Remove strict blockers to allow TinyMCE's intentional indenting to show up */
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    .vms-markdown ul, .vms-markdown ul ul, .vms-markdown ul ul ul {
+        list-style-type: disc !important;
+    }
+    .vms-markdown ol, .vms-markdown ol ol, .vms-markdown ol ol ol {
+        list-style-type: decimal !important;
+    }
+    .vms-markdown li::marker {
+        color: #111827 !important;
+        font-size: 1.1em;
+    }
+    .dark .vms-markdown li::marker {
+        color: #f3f4f6 !important;
+    }
 </style>
 <div class="vms-markdown prose prose-base dark:prose-invert max-w-none 
     prose-headings:font-bold prose-headings:tracking-tight
@@ -60,7 +102,7 @@
     prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
     prose-pre:!bg-gray-900 prose-pre:p-4 prose-pre:rounded-xl prose-pre:shadow-xl prose-pre:border prose-pre:border-gray-800 dark:prose-pre:!bg-[rgba(15,23,42,0.8)]
     prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-code:bg-indigo-50 dark:prose-code:bg-indigo-900/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
-    [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 [&_pre_code]:!text-gray-100 dark:[&_pre_code]:!bg-transparent dark:[&_pre_code]:!text-gray-100
+    [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 dark:[&_pre_code]:!bg-transparent
     prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline
     prose-ul:list-disc prose-ol:list-decimal">
     {!! $html !!}
