@@ -57,6 +57,8 @@ class PublicController extends Controller
             abort(404);
         }
 
+        $tutorial->load('quizQuestions');
+
         // If this is a parent and has children, we used to redirect to first child,
         // but now we allow viewing the parent's content directly.
 

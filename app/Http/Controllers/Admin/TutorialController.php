@@ -33,7 +33,12 @@ class TutorialController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'parent_id' => 'nullable|exists:tutorials,id'
+            'parent_id' => 'nullable|exists:tutorials,id',
+            'quizzes' => 'nullable|array',
+            'quizzes.*.question' => 'required_with:quizzes|string',
+            'quizzes.*.option_a' => 'required_with:quizzes.*.question|string',
+            'quizzes.*.option_b' => 'required_with:quizzes.*.question|string',
+            'quizzes.*.correct_answer' => 'required_with:quizzes.*.question|in:a,b,c,d',
         ]);
 
         $validated['category_id'] = $category->id;
@@ -45,7 +50,25 @@ class TutorialController extends Controller
                             ->max('sort_order');
         $validated['sort_order'] = $maxOrder !== null ? $maxOrder + 1 : 0;
 
-        Tutorial::create($validated);
+        $tutorial = Tutorial::create($validated);
+
+        // Handle Quiz Questions
+        if ($request->has('quizzes')) {
+            foreach ($request->quizzes as $index => $quizData) {
+                if (!empty($quizData['question'])) {
+                    $tutorial->quizQuestions()->create([
+                        'question' => $quizData['question'],
+                        'option_a' => $quizData['option_a'],
+                        'option_b' => $quizData['option_b'],
+                        'option_c' => $quizData['option_c'],
+                        'option_d' => $quizData['option_d'],
+                        'correct_answer' => $quizData['correct_answer'],
+                        'explanation' => $quizData['explanation'],
+                        'sort_order' => $index,
+                    ]);
+                }
+            }
+        }
         
         return redirect()->route('admin.categories.tutorials.index', $category)->with('success', 'Tutorial created successfully.');
     }
@@ -70,11 +93,42 @@ class TutorialController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'parent_id' => 'nullable|exists:tutorials,id'
+            'parent_id' => 'nullable|exists:tutorials,id',
+            'quizzes' => 'nullable|array',
+            'quizzes.*.id' => 'nullable|exists:quiz_questions,id',
+            'quizzes.*.question' => 'required_with:quizzes|string',
+            'quizzes.*.option_a' => 'required_with:quizzes.*.question|string',
+            'quizzes.*.option_b' => 'required_with:quizzes.*.question|string',
+            'quizzes.*.correct_answer' => 'required_with:quizzes.*.question|in:a,b,c,d',
         ]);
 
         $validated['is_published'] = $request->boolean('is_published');
         $tutorial->update($validated);
+
+        // Handle Quiz Questions
+        $quizIds = [];
+        if ($request->has('quizzes')) {
+            foreach ($request->quizzes as $index => $quizData) {
+                if (!empty($quizData['question'])) {
+                    $quiz = $tutorial->quizQuestions()->updateOrCreate(
+                        ['id' => $quizData['id'] ?? null],
+                        [
+                            'question' => $quizData['question'],
+                            'option_a' => $quizData['option_a'],
+                            'option_b' => $quizData['option_b'],
+                            'option_c' => $quizData['option_c'],
+                            'option_d' => $quizData['option_d'],
+                            'correct_answer' => $quizData['correct_answer'],
+                            'explanation' => $quizData['explanation'],
+                            'sort_order' => $index,
+                        ]
+                    );
+                    $quizIds[] = $quiz->id;
+                }
+            }
+        }
+        // Delete removed questions
+        $tutorial->quizQuestions()->whereNotIn('id', $quizIds)->delete();
         
         return redirect()->route('admin.categories.tutorials.index', $category)->with('success', 'Tutorial updated successfully.');
     }

@@ -96,6 +96,111 @@
                     </div>
                 </article>
 
+                <!-- Quiz Section -->
+                @if($tutorial->quizQuestions->count() > 0)
+                <div class="mt-24 pt-16 border-t border-gray-100 dark:border-gray-800" id="tutorial-quiz">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="text-center mb-16">
+                            <h2 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-3">Knowledge check</h2>
+                            <p class="text-gray-500 dark:text-gray-400">Validate your understanding of this tutorial</p>
+                        </div>
+
+                        <div class="space-y-16">
+                            @foreach($tutorial->quizQuestions as $quiz)
+                            <div class="relative" 
+                                 x-data="{ 
+                                    selected: null, 
+                                    answered: false, 
+                                    correct: @js($quiz->correct_answer),
+                                    isCorrect() { return this.selected === this.correct }
+                                 }">
+                                
+                                <div class="relative">
+                                    <!-- Question Label -->
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">Question {{ $loop->iteration }}</span>
+                                    </div>
+
+                                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white leading-snug mb-10">
+                                        {{ $quiz->question }}
+                                    </h3>
+
+                                    <div class="space-y-3">
+                                        @foreach(['a', 'b', 'c', 'd'] as $opt)
+                                            @if($quiz->{'option_'.$opt})
+                                                <button 
+                                                    @click="if(!answered) { selected = '{{ $opt }}'; answered = true; }"
+                                                    class="group relative w-full text-left px-6 py-5 rounded-2xl border transition-all duration-200 flex items-center justify-between"
+                                                    :class="{
+                                                        'border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm': !answered,
+                                                        'border-green-500 bg-green-50/30 dark:bg-green-900/10': answered && '{{ $opt }}' === correct,
+                                                        'border-red-500 bg-red-50/30 dark:bg-red-900/10': answered && selected === '{{ $opt }}' && '{{ $opt }}' !== correct,
+                                                        'opacity-50 grayscale-[0.5]': answered && selected !== '{{ $opt }}' && '{{ $opt }}' !== correct
+                                                    }"
+                                                    :disabled="answered"
+                                                >
+                                                    <div class="flex items-center gap-4">
+                                                        <span class="text-sm font-bold w-6 h-6 flex items-center justify-center rounded-md transition-colors"
+                                                            :class="{
+                                                                'bg-gray-100 dark:bg-gray-800 text-gray-400 group-hover:bg-gray-200': !answered,
+                                                                'bg-green-500 text-white': answered && '{{ $opt }}' === correct,
+                                                                'bg-red-500 text-white': answered && selected === '{{ $opt }}' && '{{ $opt }}' !== correct,
+                                                                'bg-gray-100 dark:bg-gray-800 text-gray-400': answered && selected !== '{{ $opt }}' && '{{ $opt }}' !== correct
+                                                            }">
+                                                            {{ strtoupper($opt) }}
+                                                        </span>
+                                                        <span class="text-base font-medium tracking-tight text-gray-800 dark:text-gray-200">
+                                                            {{ $quiz->{'option_'.$opt} }}
+                                                        </span>
+                                                    </div>
+
+                                                    <div x-show="answered && ('{{ $opt }}' === correct || selected === '{{ $opt }}')">
+                                                        <template x-if="'{{ $opt }}' === correct">
+                                                            <svg class="w-5 h-5 text-green-600 animate-bounce-in" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                                        </template>
+                                                        <template x-if="selected === '{{ $opt }}' && '{{ $opt }}' !== correct">
+                                                            <svg class="w-5 h-5 text-red-600 animate-shake" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                        </template>
+                                                    </div>
+                                                </button>
+                                            @endif
+                                        @endforeach
+                                    </div>
+
+                                    <!-- Clean Explanation -->
+                                    <div x-show="answered" 
+                                         x-transition:enter="transition-all duration-300"
+                                         x-transition:enter-start="opacity-0 translate-y-3"
+                                         x-transition:enter-end="opacity-100 translate-y-0"
+                                         class="mt-8">
+                                        <div class="p-6 rounded-2xl" :class="isCorrect() ? 'bg-green-50/50 dark:bg-green-900/10' : 'bg-gray-50 dark:bg-gray-800/50'">
+                                            <div class="flex items-start gap-4">
+                                                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5" 
+                                                     :class="isCorrect() ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-500'">
+                                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-semibold mb-1" :class="isCorrect() ? 'text-green-900 dark:text-green-100' : 'text-gray-900 dark:text-gray-100'">
+                                                        <template x-if="isCorrect()">Correct</template>
+                                                        <template x-if="!isCorrect()">Explanation</template>
+                                                    </p>
+                                                    <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-400 font-medium">
+                                                        {{ $quiz->explanation }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Navigation between topics -->
                 <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
                     @php
@@ -202,6 +307,27 @@
         }
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Quiz Animations */
+        @keyframes bounce-in {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-bounce-in {
+            animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out both;
         }
     </style>
 </x-public-layout>

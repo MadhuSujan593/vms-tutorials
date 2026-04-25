@@ -39,4 +39,9 @@ class Tutorial extends Model
     {
         return $this->hasMany(Tutorial::class, 'parent_id')->orderBy('sort_order')->orderBy('created_at');
     }
+
+    public function quizQuestions()
+    {
+        return $this->hasMany(QuizQuestion::class)->orderBy('sort_order');
+    }
 }
