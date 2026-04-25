@@ -266,7 +266,7 @@
                                     
                                     <button @click="showReward = false" 
                                             class="w-full inline-flex items-center justify-center px-6 py-3 {{ $tutorial->category->practice_test_link ? 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' : 'bg-indigo-600 hover:bg-indigo-700 text-white' }} text-sm font-bold rounded-xl transition-all">
-                                        {{ $tutorial->category->practice_test_link ? 'Back to Tutorial' : 'Back to Tutorial' }}
+                                        Continue to Tutorial
                                     </button>
                                 </div>
                             </div>
