@@ -98,7 +98,12 @@
 
                 <!-- Clean & Minimalist Quiz Section -->
                 @if($tutorial->quizQuestions->count() > 0)
-                <div class="mt-20 pt-10 border-t border-gray-100 dark:border-gray-800 text-gray-900 dark:text-gray-100" id="tutorial-quiz">
+                <div class="mt-20 pt-10 border-t border-gray-100 dark:border-gray-800 text-gray-900 dark:text-gray-100" id="tutorial-quiz" 
+                     x-data="{ 
+                        completedCount: 0, 
+                        totalQuestions: {{ $tutorial->quizQuestions->count() }},
+                        showReward: false
+                     }">
                     <div class="max-w-2xl mx-auto">
                         <div class="mb-12">
                             <h2 class="text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">Check your knowledge</h2>
@@ -112,7 +117,16 @@
                                     selected: null, 
                                     answered: false, 
                                     correct: @js($quiz->correct_answer),
-                                    isCorrect() { return this.selected === this.correct }
+                                    isCorrect() { return this.selected === this.correct },
+                                    markAsAnswered() {
+                                        if(!this.answered) {
+                                            this.answered = true;
+                                            completedCount++;
+                                            if(completedCount === totalQuestions) {
+                                                setTimeout(() => { showReward = true; }, 800);
+                                            }
+                                        }
+                                    }
                                  }">
                                 
                                 <div class="mb-6">
@@ -126,7 +140,7 @@
                                     @foreach(['a', 'b', 'c', 'd'] as $opt)
                                         @if($quiz->{'option_'.$opt})
                                             <button 
-                                                @click="if(!answered) { selected = '{{ $opt }}'; answered = true; }"
+                                                @click="if(!answered) { selected = '{{ $opt }}'; markAsAnswered(); }"
                                                 class="w-full text-left px-5 py-4 rounded-xl border transition-all flex items-center justify-between group"
                                                 :class="{
                                                     'border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 bg-white dark:bg-gray-900 hover:shadow-sm': !answered,
@@ -200,9 +214,67 @@
                             </div>
                             @endforeach
                         </div>
+
+                        <!-- Quiz Completion Modal (Pro-Minimalist Style) -->
+                        <div x-show="showReward" 
+                             class="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-8"
+                             x-cloak>
+                            <!-- Clean Backdrop -->
+                            <div x-show="showReward"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0"
+                                 x-transition:enter-end="opacity-100"
+                                 @click="showReward = false"
+                                 class="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px]"></div>
+
+                            <!-- Modal Card -->
+                            <div x-show="showReward" 
+                                 x-transition:enter="transition cubic-bezier(0.4, 0, 0.2, 1) duration-300"
+                                 x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                                 class="relative w-full max-w-sm bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-8 text-center ring-1 ring-black/5">
+                                
+                                <!-- Minimalist Success Icon -->
+                                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Congratulations!</h3>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 space-y-4 mb-8">
+                                    <p>
+                                        You've successfully mastered the knowledge check for 
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400">"{{ $tutorial->title }}."</span>
+                                    </p>
+                                    @if($tutorial->category->practice_test_link)
+                                        <p class="font-medium text-gray-600 dark:text-gray-300">
+                                            For more questions and practice, click the link below:
+                                        </p>
+                                    @else
+                                        <p class="font-medium text-gray-600 dark:text-gray-300">
+                                            Keep up the great work and continue your learning journey!
+                                        </p>
+                                    @endif
+                                </div>
+
+                                <div class="space-y-3">
+                                    @if($tutorial->category->practice_test_link)
+                                        <a href="{{ $tutorial->category->practice_test_link }}" target="_blank" 
+                                           class="w-full inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm">
+                                            Practice More Questions
+                                        </a>
+                                    @endif
+                                    
+                                    <button @click="showReward = false" 
+                                            class="w-full inline-flex items-center justify-center px-6 py-3 {{ $tutorial->category->practice_test_link ? 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' : 'bg-indigo-600 hover:bg-indigo-700 text-white' }} text-sm font-bold rounded-xl transition-all">
+                                        {{ $tutorial->category->practice_test_link ? 'Back to Tutorial' : 'Continue' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @endif
+
 
                 <!-- Navigation between topics -->
                 <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">

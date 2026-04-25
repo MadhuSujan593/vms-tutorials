@@ -36,10 +36,20 @@
                         </div>
 
                         <!-- Description -->
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <label for="description" class="block text-sm font-medium text-gray-700">Description (Optional)</label>
                             <textarea name="description" id="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  sm:text-sm" placeholder="Brief description about this category...">{{ old('description') }}</textarea>
                             @error('description')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Practice Test Link -->
+                        <div class="mb-6">
+                            <label for="practice_test_link" class="block text-sm font-medium text-gray-700">Practice Test/Quiz Link (Optional)</label>
+                            <input type="url" name="practice_test_link" id="practice_test_link" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 sm:text-sm" value="{{ old('practice_test_link') }}" placeholder="https://vms-tutorials.com/quizzes/python-advanced">
+                            <p class="text-xs text-gray-500 mt-1">If provided, this link will be shown to users after they complete a tutorial quiz.</p>
+                            @error('practice_test_link')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>

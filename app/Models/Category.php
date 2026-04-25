@@ -12,7 +12,7 @@ class Category extends Model
 {
     use HasFactory, HasSlug;
 
-    protected $fillable = ['name', 'slug', 'description', 'icon', 'is_blog'];
+    protected $fillable = ['name', 'slug', 'description', 'icon', 'is_blog', 'practice_test_link'];
 
     protected $casts = [
         'is_blog' => 'boolean',

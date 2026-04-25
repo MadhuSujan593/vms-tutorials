@@ -30,6 +30,7 @@ class CategoryController extends Controller
             'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:5120', // Max 5MB
             'related_categories' => 'nullable|array',
             'related_categories.*' => 'exists:categories,id',
+            'practice_test_link' => 'nullable|url|max:500',
         ]);
         
         $validated['is_blog'] = $request->boolean('is_blog');
@@ -63,6 +64,7 @@ class CategoryController extends Controller
             'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:5120', // Max 5MB
             'related_categories' => 'nullable|array',
             'related_categories.*' => 'exists:categories,id',
+            'practice_test_link' => 'nullable|url|max:500',
         ]);
 
         $validated['is_blog'] = $request->boolean('is_blog');
