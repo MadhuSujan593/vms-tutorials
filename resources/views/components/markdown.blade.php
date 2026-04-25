@@ -60,6 +60,10 @@
     .dark .vms-markdown pre[class*="language-"] {
         color: #eee !important;
     }
+    .vms-markdown li:empty, 
+    .vms-markdown li > p:empty {
+        display: none !important;
+    }
     
     /* Override Tailwind Prose list styling to perfectly match TinyMCE editor */
     div.vms-markdown.prose ul, 

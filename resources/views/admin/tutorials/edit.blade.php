@@ -102,7 +102,13 @@
                 promotion: false,
                 branding: false,
                 height: 700,
-                content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6; } ul, ol { padding-left: 1.5rem; } ul, ul ul, ul ul ul { list-style-type: disc !important; } ol, ol ol, ol ol ol { list-style-type: decimal !important; }',
+                paste_data_images: true,
+                paste_as_text: false,
+                paste_preprocess: function(plugin, args) {
+                    // Strip empty paragraphs and list items that cause phantom dots
+                    args.content = args.content.replace(/<(p|li)>(\s|&nbsp;|<br\/?>)*<\/\1>/gi, '');
+                },
+                content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6; } ul, ol { padding-left: 1.25rem; } ul, ul ul, ul ul ul { list-style-type: disc !important; } ol, ol ol, ol ol ol { list-style-type: decimal !important; }',
                 images_upload_handler: function (blobInfo, progress) {
                     return new Promise((resolve, reject) => {
                         const formData = new FormData();
