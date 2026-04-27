@@ -30,10 +30,17 @@ class Markdown extends Component
         
         foreach ($matches[1] as $index => $tag) {
             $attrs = $matches[2][$index];
-            $text = strip_tags($matches[3][$index]);
+            $rawText = strip_tags($matches[3][$index]);
+            
+            // Clean text for TOC: decode entities, remove MD symbols, links, and collapse spaces
+            $text = html_entity_decode($rawText, ENT_QUOTES, 'UTF-8');
+            $text = preg_replace('/!\[.*?\]\(.*?\)|\[.*?\]\(.*?\)/', '', $text); // Remove MD images and links
+            $text = preg_replace('/[#*`_~]|&nbsp;/', '', $text); // Remove MD markers and nbsp
+            $text = trim(preg_replace('/\s+/', ' ', $text)); // Normalize whitespace
+            
             $slug = \Illuminate\Support\Str::slug($text);
             
-            // Inject ID into the HTML
+            // Inject ID into the HTML using the original content to avoid breaking structure
             $originalTagStr = "<$tag" . $attrs . ">" . $matches[3][$index] . "</$tag>";
             $newTagStr = "<$tag" . $attrs . " id=\"$slug\">" . $matches[3][$index] . "</$tag>";
             $this->html = str_replace($originalTagStr, $newTagStr, $this->html);
