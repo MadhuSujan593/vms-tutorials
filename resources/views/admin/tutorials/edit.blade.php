@@ -225,8 +225,34 @@
                 paste_preprocess: function(plugin, args) {
                     // Strip empty paragraphs and list items that cause phantom dots
                     args.content = args.content.replace(/<(p|li)>(\s|&nbsp;|<br\/?>)*<\/\1>/gi, '');
+                    // Strip dangerous CSS classes from pasted divs (ChatGPT, Notion, Google Docs)
+                    args.content = args.content.replace(/<div\s+[^>]*class="[^"]*"[^>]*>/gi, '<div>');
+                    // Remove deeply nested empty wrapper divs
+                    for (var i = 0; i < 10; i++) {
+                        var before = args.content;
+                        args.content = args.content.replace(/<div>\s*(<div)/gi, '$1');
+                        args.content = args.content.replace(/<div>\s*<\/div>/g, '');
+                        if (before === args.content) break;
+                    }
+                    // Strip data-start, data-end, data-section-id attributes
+                    args.content = args.content.replace(/\s*data-(?:start|end|section-id)="[^"]*"/gi, '');
+                    // Strip role="text" attributes
+                    args.content = args.content.replace(/\s*role="text"/gi, '');
                 },
-                content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6; } ul, ol { padding-left: 1.25rem; } ul, ul ul, ul ul ul { list-style-type: disc !important; } ol, ol ol, ol ol ol { list-style-type: decimal !important; }',
+                content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6; color: #374151; max-width: 100%; } h1, h2, h3 { color: #111827; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; } h2 { border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; } ul, ol { padding-left: 1.5rem; } li { margin-bottom: 0.25em; } code { background: #f3f4f6; color: #db2777; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: ui-monospace, monospace; font-size: 0.9em; } pre { background: #1f2937; color: #f3f4f6; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; } blockquote { border-left: 4px solid #e5e7eb; padding-left: 1rem; color: #6b7280; italic: true; } img { max-width: 100%; height: auto; border-radius: 0.5rem; }',
+                textpattern_patterns: [
+                    {start: '*', end: '*', format: 'italic'},
+                    {start: '**', end: '**', format: 'bold'},
+                    {start: '#', format: 'h1'},
+                    {start: '##', format: 'h2'},
+                    {start: '###', format: 'h3'},
+                    {start: '####', format: 'h4'},
+                    {start: '#####', format: 'h5'},
+                    {start: '######', format: 'h6'},
+                    {start: '1. ', cmd: 'InsertOrderedList'},
+                    {start: '* ', cmd: 'InsertUnorderedList'},
+                    {start: '- ', cmd: 'InsertUnorderedList'}
+                ],
                 images_upload_handler: function (blobInfo, progress) {
                     return new Promise((resolve, reject) => {
                         const formData = new FormData();
