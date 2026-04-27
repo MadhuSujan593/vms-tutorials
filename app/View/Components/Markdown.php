@@ -149,6 +149,11 @@ class Markdown extends Component
         // dangerous Tailwind classes (absolute, overflow-clip, pointer-events-none).
         $html = preg_replace('/<\/?div[^>]*>/i', '', $html);
 
+        // Strip empty paragraphs that create large gaps between sections.
+        // These are commonly pasted from ChatGPT, Google Docs, etc.
+        // Matches: <p></p>, <p> </p>, <p>&nbsp;</p>, <p><br></p>, <p><br/></p>
+        $html = preg_replace('/<p[^>]*>(\s|&nbsp;|<br\s*\/?>)*<\/p>/i', '', $html);
+
         // Strip role="text" attributes from pasted content
         $html = preg_replace('/\s*role="text"/i', '', $html);
 

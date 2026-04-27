@@ -60,16 +60,40 @@
     .dark .vms-markdown pre[class*="language-"] {
         color: #eee !important;
     }
+
+    /* Hide empty elements that create phantom whitespace gaps */
     .vms-markdown li:empty, 
-    .vms-markdown li > p:empty {
+    .vms-markdown li > p:empty,
+    .vms-markdown p:empty {
         display: none !important;
+    }
+    /* Also hide paragraphs that only contain <br> or &nbsp; */
+    .vms-markdown p > br:only-child {
+        display: none !important;
+    }
+
+    /* Tighten overall prose spacing to match TinyMCE editor */
+    div.vms-markdown.prose > * + * {
+        margin-top: 0.75em !important;
+    }
+    div.vms-markdown.prose p {
+        margin-top: 0.5em !important;
+        margin-bottom: 0.5em !important;
+    }
+    div.vms-markdown.prose h2 {
+        margin-top: 1.5em !important;
+        margin-bottom: 0.5em !important;
+    }
+    div.vms-markdown.prose h3 {
+        margin-top: 1em !important;
+        margin-bottom: 0.5em !important;
     }
     
     /* Override Tailwind Prose list styling to perfectly match TinyMCE editor */
     div.vms-markdown.prose ul, 
     div.vms-markdown.prose ol {
-        margin-top: 0.5rem !important;
-        margin-bottom: 0.5rem !important;
+        margin-top: 0.5em !important;
+        margin-bottom: 0.5em !important;
     }
     div.vms-markdown.prose ul:not([style]), 
     div.vms-markdown.prose ol:not([style]) {
@@ -101,9 +125,9 @@
 </style>
 <div class="vms-markdown prose prose-base dark:prose-invert max-w-none 
     prose-headings:font-bold prose-headings:tracking-tight
-    prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:border-b prose-h2:pb-2 prose-h2:border-gray-100 dark:prose-h2:border-gray-800
-    prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3
-    prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
+    prose-h2:text-xl prose-h2:mt-[1.5em] prose-h2:mb-[0.5em] prose-h2:border-b prose-h2:pb-2 prose-h2:border-gray-100 dark:prose-h2:border-gray-800
+    prose-h3:text-lg prose-h3:mt-[1em] prose-h3:mb-[0.5em]
+    prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-normal prose-p:my-[0.5em]
     prose-pre:!bg-gray-900 prose-pre:p-4 prose-pre:rounded-xl prose-pre:shadow-xl prose-pre:border prose-pre:border-gray-800 dark:prose-pre:!bg-[rgba(15,23,42,0.8)]
     prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-code:bg-indigo-50 dark:prose-code:bg-indigo-900/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
     [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 dark:[&_pre_code]:!bg-transparent

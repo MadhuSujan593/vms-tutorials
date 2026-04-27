@@ -220,12 +220,14 @@
                         args.content = args.content.replace(/<div>\s*<\/div>/g, '');
                         if (before === args.content) break;
                     }
+                    // Strip empty paragraphs that create large gaps
+                    args.content = args.content.replace(/<p[^>]*>(\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, '');
                     // Strip data-start, data-end, data-section-id attributes
                     args.content = args.content.replace(/\s*data-(?:start|end|section-id)="[^"]*"/gi, '');
                     // Strip role="text" attributes
                     args.content = args.content.replace(/\s*role="text"/gi, '');
                 },
-                content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6; color: #374151; max-width: 100%; } h1, h2, h3 { color: #111827; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; } h2 { border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; } ul, ol { padding-left: 1.5rem; } li { margin-bottom: 0.25em; } code { background: #f3f4f6; color: #db2777; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: ui-monospace, monospace; font-size: 0.9em; } pre { background: #1f2937; color: #f3f4f6; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; } blockquote { border-left: 4px solid #e5e7eb; padding-left: 1rem; color: #6b7280; italic: true; } img { max-width: 100%; height: auto; border-radius: 0.5rem; }',
+                content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.5; color: #374151; max-width: 100%; } p { margin: 0.4em 0; } h1, h2, h3, h4 { color: #111827; font-weight: 700; margin-top: 1em; margin-bottom: 0.4em; } h2 { border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; } ul, ol { padding-left: 1.5rem; margin: 0.4em 0; } li { margin-bottom: 0.15em; } code { background: #f3f4f6; color: #db2777; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: ui-monospace, monospace; font-size: 0.9em; } pre { background: #1f2937; color: #f3f4f6; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 0.5em 0; } blockquote { border-left: 4px solid #e5e7eb; padding-left: 1rem; color: #6b7280; font-style: italic; } img { max-width: 100%; height: auto; border-radius: 0.5rem; }',
                 textpattern_patterns: [
                     {start: '*', end: '*', format: 'italic'},
                     {start: '**', end: '**', format: 'bold'},
