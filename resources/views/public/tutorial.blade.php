@@ -91,8 +91,9 @@
                         <div class="h-1 w-16 bg-indigo-600 rounded-full"></div>
                     </header>
 
+                    @php $markdownComponent = new \App\View\Components\Markdown($tutorial->content); @endphp
                     <div class="relative">
-                        <x-markdown :content="$tutorial->content" />
+                        @include('components.markdown', ['html' => $markdownComponent->html, 'toc' => $markdownComponent->toc])
                     </div>
                 </article>
 
@@ -374,12 +375,12 @@
                         <li>
                             <a href="#" class="block text-indigo-600 dark:text-indigo-400">Overview</a>
                         </li>
-                        <!-- This part is dynamic via the component's TOC -->
-                        @php $md = new \App\View\Components\Markdown($tutorial->content); @endphp
-                        @foreach($md->toc as $item)
+                        <!-- Dynamic TOC from the same Markdown instance used to render content -->
+                        @foreach($markdownComponent->toc as $item)
                             <li>
                                 <a href="#{{ $item['slug'] }}" 
-                                   class="block {{ $item['tag'] === 'h3' ? 'pl-3' : '' }} text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                                   class="block {{ $item['tag'] === 'h3' ? 'pl-3' : '' }} text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors truncate"
+                                   title="{{ $item['text'] }}">
                                     {{ $item['text'] }}
                                 </a>
                             </li>
