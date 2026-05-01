@@ -161,8 +161,7 @@
 
                         <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                             <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-10 w-auto rounded-lg shadow-sm group-hover:opacity-90 transition-opacity">
-                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:bg-indigo-500 transition-colors text-2xl font-bold tracking-tighter">VMS</span>
-                            <span class="dark:text-white hidden sm:inline text-2xl font-bold tracking-tighter">Tutorials</span>
+                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:bg-indigo-500 transition-colors text-lg sm:text-xl font-bold tracking-tighter">VMS Tutorials</span>
                         </a>
                     </div>
 
@@ -282,10 +281,9 @@
                     
                     <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto custom-scrollbar">
                         <div class="flex-shrink-0 flex items-center justify-between px-4 mb-8">
-                            <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+                            <div class="flex items-center gap-2 text-base sm:text-lg font-bold tracking-tighter">
                                 <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-8 w-auto rounded-md shadow-sm">
-                                <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS</span>
-                                <span class="dark:text-white">Tutorials</span>
+                                <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS Tutorials</span>
                             </div>
                             <button @click="mobileMenuOpen = false" 
                                     class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
@@ -316,10 +314,9 @@
         <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-10 mt-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="flex flex-col items-center gap-4">
-                    <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+                    <div class="flex items-center gap-2 text-base sm:text-lg font-bold tracking-tighter">
                         <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-8 w-auto rounded-md shadow-sm">
-                        <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS</span>
-                        <span class="dark:text-white">Tutorials</span>
+                        <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS Tutorials</span>
                     </div>
                     <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
                         &copy; {{ date('Y') }} VMS Tutorials. All rights reserved. 
