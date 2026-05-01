@@ -161,7 +161,10 @@
 
                         <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                             <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-10 w-auto rounded-lg shadow-sm group-hover:opacity-90 transition-opacity">
-                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:bg-indigo-500 transition-colors text-lg sm:text-xl font-bold tracking-tighter">VMS Tutorials</span>
+                            <div class="flex items-center text-lg sm:text-xl font-bold tracking-tighter">
+                                <span class="text-indigo-600 dark:text-indigo-400">VMS</span>
+                                <span class="text-gray-900 dark:text-white ml-1.5">Tutorials</span>
+                            </div>
                         </a>
                     </div>
 
@@ -283,7 +286,8 @@
                         <div class="flex-shrink-0 flex items-center justify-between px-4 mb-8">
                             <div class="flex items-center gap-2 text-base sm:text-lg font-bold tracking-tighter">
                                 <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-8 w-auto rounded-md shadow-sm">
-                                <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS Tutorials</span>
+                                <span class="text-indigo-600 dark:text-indigo-400">VMS</span>
+                                <span class="text-gray-900 dark:text-white">Tutorials</span>
                             </div>
                             <button @click="mobileMenuOpen = false" 
                                     class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
@@ -316,7 +320,8 @@
                 <div class="flex flex-col items-center gap-4">
                     <div class="flex items-center gap-2 text-base sm:text-lg font-bold tracking-tighter">
                         <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-8 w-auto rounded-md shadow-sm">
-                        <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS Tutorials</span>
+                        <span class="text-indigo-600 dark:text-indigo-400">VMS</span>
+                        <span class="text-gray-900 dark:text-white">Tutorials</span>
                     </div>
                     <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
                         &copy; {{ date('Y') }} VMS Tutorials. All rights reserved. 
