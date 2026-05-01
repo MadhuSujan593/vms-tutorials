@@ -132,9 +132,9 @@
                                 
                                 <div class="mb-6">
                                     <div class="inline-flex items-center px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] rounded-full mb-3">Question {{ $loop->iteration }}</div>
-                                    <h3 class="text-lg font-semibold leading-relaxed">
-                                        {!! str_replace(['&lt;code&gt;', '&lt;/code&gt;', '&lt;pre&gt;', '&lt;/pre&gt;'], ['<code>', '</code>', '<pre>', '</pre>'], e($quiz->question)) !!}
-                                    </h3>
+                                    <div class="text-lg font-semibold leading-relaxed quiz-markdown-content">
+                                        {!! \Illuminate\Support\Str::markdown($quiz->question ?? '', ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
+                                    </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 gap-3">
@@ -151,8 +151,8 @@
                                                 }"
                                                 :disabled="answered"
                                             >
-                                                <div class="flex items-center gap-4">
-                                                    <span class="text-xs font-bold w-6 h-6 flex items-center justify-center rounded border transition-colors lowercase"
+                                                <div class="flex items-center gap-4 flex-1 min-w-0">
+                                                    <span class="text-xs font-bold w-6 h-6 flex shrink-0 items-center justify-center rounded border transition-colors lowercase"
                                                         :class="{
                                                             'border-gray-200 dark:border-gray-700 text-gray-400 bg-gray-50 dark:bg-gray-800 group-hover:bg-blue-50 group-hover:text-blue-500 group-hover:border-blue-200 dark:group-hover:bg-blue-900/30': !answered,
                                                             'border-green-500 bg-green-500 text-white': answered && '{{ $opt }}' === correct,
@@ -161,9 +161,9 @@
                                                         }">
                                                         {{ $opt }}
                                                     </span>
-                                                    <span class="text-sm font-semibold tracking-tight" :class="answered && '{{ $opt }}' === correct ? 'text-green-700 dark:text-green-400' : (answered && selected === '{{ $opt }}' ? 'text-red-700 dark:text-red-400' : 'text-gray-700 dark:text-gray-300')">
-                                                        {!! str_replace(['&lt;code&gt;', '&lt;/code&gt;', '&lt;pre&gt;', '&lt;/pre&gt;'], ['<code>', '</code>', '<pre>', '</pre>'], e($quiz->{'option_'.$opt})) !!}
-                                                    </span>
+                                                    <div class="text-sm font-semibold tracking-tight quiz-markdown-content flex-1 min-w-0" :class="answered && '{{ $opt }}' === correct ? 'text-green-700 dark:text-green-400' : (answered && selected === '{{ $opt }}' ? 'text-red-700 dark:text-red-400' : 'text-gray-700 dark:text-gray-300')">
+                                                        {!! \Illuminate\Support\Str::markdown($quiz->{'option_'.$opt} ?? '', ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
+                                                    </div>
                                                 </div>
                                                 
                                                 <div x-show="answered && ('{{ $opt }}' === correct || selected === '{{ $opt }}')">
@@ -202,13 +202,13 @@
                                             </template>
                                         </div>
 
-                                        <div class="flex-1">
+                                        <div class="flex-1 min-w-0">
                                             <h4 class="text-[10px] font-black uppercase tracking-wider mb-0.5" :class="isCorrect() ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
                                                 <span x-text="isCorrect() ? 'Great Job!' : 'Insightful Explanation'"></span>
                                             </h4>
-                                            <p class="text-sm font-bold text-gray-700 dark:text-gray-200">
-                                                {!! str_replace(['&lt;code&gt;', '&lt;/code&gt;', '&lt;pre&gt;', '&lt;/pre&gt;'], ['<code>', '</code>', '<pre>', '</pre>'], e($quiz->explanation)) !!}
-                                            </p>
+                                            <div class="text-sm font-bold text-gray-700 dark:text-gray-200 quiz-markdown-content">
+                                                {!! \Illuminate\Support\Str::markdown($quiz->explanation ?? '', ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -279,34 +279,88 @@
 
                 <!-- Navigation between topics -->
                 <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
-                    @push('scripts')
                     <style>
                         /* Polished Quiz Code Styling */
-                        #tutorial-quiz code {
+                        #tutorial-quiz pre {
+                            background-color: #f3f4f6 !important;
+                            color: #1f2937 !important;
+                            border: 1px solid #e5e7eb;
+                            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+                            padding: 1rem;
+                            border-radius: 0.75rem;
+                            margin-top: 1rem;
+                            margin-bottom: 1rem;
+                            overflow-x: auto;
+                            font-size: 0.85em;
+                            line-height: 1.6;
+                        }
+                        
+                        /* Light theme syntax highlighting specifically for the quiz code blocks */
+                        #tutorial-quiz pre .token.comment, #tutorial-quiz pre .token.prolog, #tutorial-quiz pre .token.doctype, #tutorial-quiz pre .token.cdata { color: #6e7781 !important; }
+                        #tutorial-quiz pre .token.namespace { opacity: .7 !important; }
+                        #tutorial-quiz pre .token.property, #tutorial-quiz pre .token.tag, #tutorial-quiz pre .token.boolean, #tutorial-quiz pre .token.number, #tutorial-quiz pre .token.constant, #tutorial-quiz pre .token.symbol, #tutorial-quiz pre .token.deleted { color: #005cc5 !important; }
+                        #tutorial-quiz pre .token.selector, #tutorial-quiz pre .token.attr-name, #tutorial-quiz pre .token.string, #tutorial-quiz pre .token.char, #tutorial-quiz pre .token.builtin, #tutorial-quiz pre .token.inserted { color: #032f62 !important; }
+                        #tutorial-quiz pre .token.operator, #tutorial-quiz pre .token.entity, #tutorial-quiz pre .token.url { color: #24292e !important; }
+                        #tutorial-quiz pre .token.atrule, #tutorial-quiz pre .token.attr-value, #tutorial-quiz pre .token.keyword { color: #d73a49 !important; }
+                        #tutorial-quiz pre .token.function, #tutorial-quiz pre .token.class-name { color: #6f42c1 !important; }
+                        #tutorial-quiz pre .token.regex, #tutorial-quiz pre .token.important, #tutorial-quiz pre .token.variable { color: #e36209 !important; }
+                        
+                        #tutorial-quiz pre code {
+                            background-color: transparent;
+                            padding: 0;
+                            border-radius: 0;
+                            color: inherit;
+                            font-weight: inherit;
+                        }
+                        #tutorial-quiz button pre {
+                            margin-top: 0.25rem;
+                            margin-bottom: 0.25rem;
+                            padding: 0.75rem;
+                            font-size: 0.8em;
+                        }
+                        .quiz-markdown-content p:not(:last-child) {
+                            margin-bottom: 0.75em;
+                        }
+                        .quiz-markdown-content p {
+                            display: inline-block;
+                            width: 100%;
+                        }
+                        .quiz-markdown-content code {
                             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
                             font-size: 0.9em;
                             background-color: rgba(0, 0, 0, 0.05);
                             padding: 0.2rem 0.4rem;
                             border-radius: 0.4rem;
-                            color: #e11d48; /* Soft Red for code visibility */
+                            color: #e11d48;
                             font-weight: 600;
                         }
-                        .dark #tutorial-quiz code {
+                        .dark .quiz-markdown-content code {
                             background-color: rgba(255, 255, 255, 0.1);
                             color: #fb7185;
                         }
-                        #tutorial-quiz pre {
-                            background-color: #1e293b;
-                            color: #f8fafc;
-                            padding: 1rem;
-                            border-radius: 0.75rem;
-                            margin-top: 1rem;
-                            overflow-x: auto;
-                            font-size: 0.85em;
-                            line-height: 1.6;
+                        .dark #tutorial-quiz pre {
+                            border-color: rgba(255, 255, 255, 0.1);
+                            background-color: #1f2937 !important;
+                            color: #f8fafc !important;
+                        }
+                        
+                        /* Dark theme syntax highlighting specifically for the quiz code blocks */
+                        .dark #tutorial-quiz pre .token.comment, .dark #tutorial-quiz pre .token.prolog, .dark #tutorial-quiz pre .token.doctype, .dark #tutorial-quiz pre .token.cdata { color: #999 !important; }
+                        .dark #tutorial-quiz pre .token.property, .dark #tutorial-quiz pre .token.tag, .dark #tutorial-quiz pre .token.boolean, .dark #tutorial-quiz pre .token.number, .dark #tutorial-quiz pre .token.constant, .dark #tutorial-quiz pre .token.symbol, .dark #tutorial-quiz pre .token.deleted { color: #f92672 !important; }
+                        .dark #tutorial-quiz pre .token.selector, .dark #tutorial-quiz pre .token.attr-name, .dark #tutorial-quiz pre .token.string, .dark #tutorial-quiz pre .token.char, .dark #tutorial-quiz pre .token.builtin, .dark #tutorial-quiz pre .token.inserted { color: #a6e22e !important; }
+                        .dark #tutorial-quiz pre .token.operator, .dark #tutorial-quiz pre .token.entity, .dark #tutorial-quiz pre .token.url { color: #f8f8f2 !important; }
+                        .dark #tutorial-quiz pre .token.atrule, .dark #tutorial-quiz pre .token.attr-value, .dark #tutorial-quiz pre .token.keyword { color: #66d9ef !important; }
+                        .dark #tutorial-quiz pre .token.function, .dark #tutorial-quiz pre .token.class-name { color: #e6db74 !important; }
+                        .dark #tutorial-quiz pre .token.regex, .dark #tutorial-quiz pre .token.important, .dark #tutorial-quiz pre .token.variable { color: #fd971f !important; }
+                        
+                        .quiz-markdown-content pre code {
+                            background-color: transparent !important;
+                            padding: 0 !important;
+                            border-radius: 0 !important;
+                            color: inherit !important;
+                            font-weight: inherit !important;
                         }
                     </style>
-                    @endpush
 
                     @php
                         $currentIndex = $flattenedTutorials->search(fn($t) => $t->id === $tutorial->id);

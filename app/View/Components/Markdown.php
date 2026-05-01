@@ -27,6 +27,11 @@ class Markdown extends Component
         ]);
 
         if ($hasMarkdown) {
+            // Pre-process: Ensure blank lines around <pre> blocks so CommonMark treats them as HTML blocks, not inline HTML.
+            // Without this, CommonMark collapses newlines into spaces and parses Markdown inside the code block.
+            $content = preg_replace('/(<pre[^>]*>)/i', "\n\n$1", $content);
+            $content = preg_replace('/(<\/pre>)/i', "$1\n\n", $content);
+
             // Pre-process: Unwrap Markdown headers/images from <p> tags so the parser can see them.
             $content = preg_replace('/<p>\s*(#{1,6}\s|!\[|```)\s*(.*?)\s*<\/p>/i', "$1$2\n", $content);
             
