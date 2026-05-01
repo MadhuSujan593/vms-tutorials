@@ -22,7 +22,7 @@ class PublicController extends Controller
             ->withCount(['tutorials' => function($query) {
                 $query->where('is_published', true);
             }])
-            ->orderBy('name')
+            ->orderBy('order')
             ->get();
 
         $banners = $this->getActiveBanners();

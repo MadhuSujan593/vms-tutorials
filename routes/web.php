@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::put('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
     Route::resource('categories', CategoryController::class);
     Route::put('categories/{category}/tutorials/reorder', [TutorialController::class, 'reorder'])->name('categories.tutorials.reorder');
     Route::resource('categories.tutorials', TutorialController::class);

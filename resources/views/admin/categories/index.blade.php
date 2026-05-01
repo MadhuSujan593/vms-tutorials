@@ -29,6 +29,9 @@
                         <table class="min-w-full leading-normal">
                             <thead>
                                 <tr>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-10">
+                                        
+                                    </th>
                                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Name
                                     </th>
@@ -46,9 +49,14 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="sortable-categories">
                                 @forelse($categories as $category)
-                                <tr>
+                                <tr class="sortable-row" data-id="{{ $category->id }}">
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <div class="drag-handle cursor-move text-gray-400 hover:text-indigo-600">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path></svg>
+                                        </div>
+                                    </td>
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-medium">
                                             {{ $category->name }}
@@ -81,7 +89,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center text-gray-500">
+                                    <td colspan="6" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center text-gray-500">
                                         No categories found.
                                     </td>
                                 </tr>
@@ -89,12 +97,42 @@
                             </tbody>
                         </table>
                     </div>
-                    
-                    <div class="mt-4">
-                        {{ $categories->links() }}
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const el = document.getElementById('sortable-categories');
+            if (!el) return;
+            
+            const sortable = new Sortable(el, {
+                animation: 150,
+                handle: '.drag-handle',
+                ghostClass: 'bg-indigo-50',
+                onEnd: function() {
+                    const ids = Array.from(el.querySelectorAll('tr.sortable-row')).map(tr => tr.dataset.id);
+                    
+                    fetch('{{ route('admin.categories.reorder') }}', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ ids: ids })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Optional: Show success feedback
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            });
+        });
+    </script>
+    @endpush
 </x-app-layout>

@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Support\Facades\View::composer('layouts.public', function ($view) {
-            $view->with('allCategories', \App\Models\Category::orderBy('name')->get());
+            $view->with('allCategories', \App\Models\Category::orderBy('order')->get());
         });
     }
 }

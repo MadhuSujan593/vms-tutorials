@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = Category::orderBy('order')->get();
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -38,6 +38,9 @@ class CategoryController extends Controller
         if ($request->hasFile('icon')) {
             $validated['icon'] = $request->file('icon')->store('categories', 'public');
         }
+        
+        $maxOrder = Category::max('order');
+        $validated['order'] = $maxOrder !== null ? $maxOrder + 1 : 0;
         
         $category = Category::create($validated);
         $this->syncRelatedCategories($category, $request->get('related_categories', []));
@@ -90,6 +93,20 @@ class CategoryController extends Controller
         $category->delete();
         \DB::table('related_categories')->where('related_id', $category->id)->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
+    }
+
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:categories,id'
+        ]);
+
+        foreach ($request->ids as $index => $id) {
+            Category::where('id', $id)->update(['order' => $index]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     private function syncRelatedCategories(Category $category, array $relatedIds)
