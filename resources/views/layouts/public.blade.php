@@ -34,14 +34,14 @@
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:title" content="{{ $title ?? 'VMS Tutorials - Master Modern Technology' }}">
         <meta property="og:description" content="{{ $metaDescription ?? 'Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more. Master backend logic and frontend brilliance.' }}">
-        <meta property="og:image" content="{{ asset('img/logo.png') }}">
+        <meta property="og:image" content="{{ asset('img/vms_logo.jpeg') }}">
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="{{ url()->current() }}">
         <meta property="twitter:title" content="{{ $title ?? 'VMS Tutorials - Master Modern Technology' }}">
         <meta property="twitter:description" content="{{ $metaDescription ?? 'Step-by-step professional coding tutorials for PHP, Java, JavaScript, and more.' }}">
-        <meta property="twitter:image" content="{{ asset('img/logo.png') }}">
+        <meta property="twitter:image" content="{{ asset('img/vms_logo.jpeg') }}">
 
         @stack('meta')
 
@@ -53,7 +53,7 @@
             "name": "VMS Tutorials",
             "alternatename": "VMS Consultix",
             "url": "{{ url('/') }}",
-            "logo": "{{ asset('img/logo.png') }}",
+            "logo": "{{ asset('img/vms_logo.jpeg') }}",
             "description": "Professional coding tutorials and technology consultant projects.",
             "contactPoint": {
                 "@type": "ContactPoint",
@@ -70,7 +70,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         
         <!-- Favicon (VMS Branding) -->
-        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-weight=%22bold%22 font-size=%2245%22 fill=%22white%22>VMS</text></svg>">
+        <link rel="icon" type="image/jpeg" href="{{ asset('img/vms_logo.jpeg') }}">
 
         <!-- Alpine Plugins (Must load before Alpine) -->
         <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
@@ -159,9 +159,10 @@
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                         </button>
 
-                        <a href="{{ route('home') }}" class="flex items-center gap-2 group text-2xl font-bold tracking-tighter">
-                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:bg-indigo-500 transition-colors">VMS</span>
-                            <span class="dark:text-white hidden sm:inline">Tutorials</span>
+                        <a href="{{ route('home') }}" class="flex items-center gap-2 group">
+                            <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-10 w-auto rounded-lg shadow-sm group-hover:opacity-90 transition-opacity">
+                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:bg-indigo-500 transition-colors text-2xl font-bold tracking-tighter">VMS</span>
+                            <span class="dark:text-white hidden sm:inline text-2xl font-bold tracking-tighter">Tutorials</span>
                         </a>
                     </div>
 
@@ -282,6 +283,7 @@
                     <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto custom-scrollbar">
                         <div class="flex-shrink-0 flex items-center justify-between px-4 mb-8">
                             <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+                                <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-8 w-auto rounded-md shadow-sm">
                                 <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS</span>
                                 <span class="dark:text-white">Tutorials</span>
                             </div>
@@ -315,6 +317,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="flex flex-col items-center gap-4">
                     <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+                        <img src="{{ asset('img/vms_logo.jpeg') }}" alt="VMS Logo" class="h-8 w-auto rounded-md shadow-sm">
                         <span class="bg-indigo-600 text-white px-2 py-1 rounded-lg">VMS</span>
                         <span class="dark:text-white">Tutorials</span>
                     </div>
