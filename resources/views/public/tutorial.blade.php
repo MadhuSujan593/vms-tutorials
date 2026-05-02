@@ -133,13 +133,13 @@
                                 <div class="mb-6">
                                     <div class="inline-flex items-center px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] rounded-full mb-3">Question {{ $loop->iteration }}</div>
                                     <div class="text-lg font-semibold leading-relaxed quiz-markdown-content">
-                                        {!! \Illuminate\Support\Str::markdown($quiz->question ?? '', ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
+                                        {!! \Illuminate\Support\Str::markdown(trim($quiz->question ?? ''), ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
                                     </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 gap-3">
                                     @foreach(['a', 'b', 'c', 'd'] as $opt)
-                                        @if($quiz->{'option_'.$opt})
+                                        @if(trim($quiz->{'option_'.$opt} ?? '') !== '')
                                             <button 
                                                 @click="if(!answered) { selected = '{{ $opt }}'; markAsAnswered(); }"
                                                 class="w-full text-left px-5 py-4 rounded-xl border transition-all flex items-center justify-between group"
@@ -162,7 +162,7 @@
                                                         {{ $opt }}
                                                     </span>
                                                     <div class="text-sm font-semibold tracking-tight quiz-markdown-content flex-1 min-w-0" :class="answered && '{{ $opt }}' === correct ? 'text-green-700 dark:text-green-400' : (answered && selected === '{{ $opt }}' ? 'text-red-700 dark:text-red-400' : 'text-gray-700 dark:text-gray-300')">
-                                                        {!! \Illuminate\Support\Str::markdown($quiz->{'option_'.$opt} ?? '', ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
+                                                        {!! \Illuminate\Support\Str::markdown(trim($quiz->{'option_'.$opt} ?? ''), ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
                                                     </div>
                                                 </div>
                                                 
@@ -207,7 +207,7 @@
                                                 <span x-text="isCorrect() ? 'Great Job!' : 'Insightful Explanation'"></span>
                                             </h4>
                                             <div class="text-sm font-bold text-gray-700 dark:text-gray-200 quiz-markdown-content">
-                                                {!! \Illuminate\Support\Str::markdown($quiz->explanation ?? '', ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
+                                                {!! \Illuminate\Support\Str::markdown(trim($quiz->explanation ?? ''), ['html_input' => 'allow', 'renderer' => ['soft_break' => "<br>\n"]]) !!}
                                             </div>
                                         </div>
                                     </div>
