@@ -110,26 +110,30 @@
                 top: 12px;
                 right: 12px;
                 padding: 6px 12px;
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 8px;
-                color: #fff;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 6px;
+                color: #94a3b8;
                 cursor: pointer;
-                font-size: 11px;
-                font-weight: 600;
+                font-size: 10px;
+                font-weight: 700;
                 text-transform: uppercase;
-                letter-spacing: 0.05em;
+                letter-spacing: 0.1em;
                 transition: all 0.2s;
-                opacity: 1;
                 z-index: 10;
             }
             .copy-btn:hover {
-                background: rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+                border-color: rgba(255, 255, 255, 0.3);
             }
             .copy-btn.copied {
-                background: #10b981;
-                border-color: #10b981;
-                opacity: 1;
+                background: #10b981 !important;
+                border-color: #10b981 !important;
+                color: #fff !important;
+            }
+            pre.has-copy-button {
+                padding-top: 2.75rem !important;
             }
             .prose table {
                 display: block;
@@ -364,7 +368,11 @@
                         const text = code ? code.innerText : pre.innerText;
                         navigator.clipboard.writeText(text).then(() => {
                             button.innerText = 'Copied!';
-                            setTimeout(() => button.innerText = 'Copy', 2000);
+                            button.classList.add('copied');
+                            setTimeout(() => {
+                                button.innerText = 'Copy';
+                                button.classList.remove('copied');
+                            }, 2000);
                         });
                     };
                     
