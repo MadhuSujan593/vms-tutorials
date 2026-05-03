@@ -121,6 +121,8 @@
                 letter-spacing: 0.1em;
                 transition: all 0.2s;
                 z-index: 10;
+                user-select: none;
+                -webkit-user-select: none;
             }
             .copy-btn:hover {
                 background: rgba(255, 255, 255, 0.1);
@@ -360,6 +362,12 @@
                         code.classList.add(preLang);
                     }
 
+                    // Create wrapper
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'code-block-wrapper relative group';
+                    pre.parentNode.insertBefore(wrapper, pre);
+                    wrapper.appendChild(pre);
+
                     // Add Copy Button
                     const button = document.createElement('button');
                     button.className = 'copy-btn';
@@ -376,8 +384,7 @@
                         });
                     };
                     
-                    pre.style.position = 'relative';
-                    pre.appendChild(button);
+                    wrapper.appendChild(button);
                 });
                 
                 Prism.highlightAll();
